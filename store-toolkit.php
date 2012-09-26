@@ -36,7 +36,6 @@ if( is_admin() ) {
 		switch( $action ) {
 
 			case 'nuke':
-
 				if( !ini_get( 'safe_mode' ) )
 					set_time_limit( 0 );
 
