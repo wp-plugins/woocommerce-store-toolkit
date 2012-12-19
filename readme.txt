@@ -4,18 +4,18 @@ Contributors: visser
 Donate link: http://www.visser.com.au/#donations
 Tags: woocommerce, mod, delete store, clean store, nuke
 Requires at least: 2.9.2
-Tested up to: 3.4.2
-Stable tag: 1.3.1
-
-Store Toolkit includes a growing set of commonly-used WooCommerce administration tools aimed at web developers and store maintainers.
+Tested up to: 3.5
+Stable tag: 1.3.2
 
 == Description ==
+
+Store Toolkit includes a growing set of commonly-used WooCommerce administration tools aimed at web developers and store maintainers.
 
 Features include:
 
 * Nuke support for clearing WooCommerce store records; Products, Product Images, Tags, Categories, Sales, Coupons, etc.
 
-If you find yourself in the situation where you need to start over with a fresh installation of WP e-Commerce then a 'nuke' will do the job.
+If you find yourself in the situation where you need to start over with a fresh installation of WooCommerce then a 'nuke' will do the job.
 
 For more information visit: http://www.visser.com.au/woocommerce/
 
@@ -40,6 +40,11 @@ If you have any problems, questions or suggestions please join the members discu
 http://www.visser.com.au/woocommerce/forums/
 
 == Changelog ==
+
+= 1.3.2 =
+* Added: Per-Category Product nuking
+* Added: Tabs support
+* Changed: Removed Tools menu reference
 
 = 1.3.1 =
 * Added: Store Toolkit menu item under WooCommerce

@@ -3,7 +3,7 @@
 Plugin Name: WooCommerce - Store Toolkit
 Plugin URI: http://www.visser.com.au/woocommerce/plugins/store-toolkit/
 Description: Permanently remove all store-generated details of your WooCommerce store.
-Version: 1.3.1
+Version: 1.3.2
 Author: Visser Labs
 Author URI: http://www.visser.com.au/about/
 License: GPL2
@@ -30,6 +30,20 @@ if( is_admin() ) {
 
 	/* Start of: WordPress Administration */
 
+	function woo_st_add_settings_link( $links, $file ) {
+
+		static $this_plugin;
+		if( !$this_plugin ) $this_plugin = plugin_basename( __FILE__ );
+		if( $file == $this_plugin ) {
+			/* Settings */
+			$settings_link = sprintf( '<a href="%s">' . __( 'Manage', 'woo_st' ) . '</a>', add_query_arg( 'page', 'woo_st', 'admin.php' ) );
+			array_unshift( $links, $settings_link );
+		}
+		return $links;
+
+	}
+	add_filter( 'plugin_action_links', 'woo_st_add_settings_link', 10, 2 );
+
 	function woo_st_init() {
 
 		$action = woo_get_action();
@@ -55,6 +69,23 @@ if( is_admin() ) {
 					woo_st_clear_dataset( 'attributes' );
 				if( isset( $_POST['woo_st_creditcards'] ) )
 					woo_st_clear_dataset( 'credit-cards' );
+
+				if( isset( $_POST['woo_st_categories'] ) ) {
+					$categories = $_POST['woo_st_categories'];
+					woo_st_clear_dataset( 'categories', $categories );
+				}
+
+				if( isset( $_POST['woo_st_posts'] ) )
+					woo_st_clear_dataset( 'posts' );
+				if( isset( $_POST['woo_st_post_categories'] ) )
+					woo_st_clear_dataset( 'post_categories' );
+				if( isset( $_POST['woo_st_post_tags'] ) )
+					woo_st_clear_dataset( 'post_tags' );
+				if( isset( $_POST['woo_st_links'] ) )
+					woo_st_clear_dataset( 'links' );
+				if( isset( $_POST['woo_st_comments'] ) )
+					woo_st_clear_dataset( 'comments' );
+
 				break;
 
 		}
@@ -62,18 +93,23 @@ if( is_admin() ) {
 	}
 	add_action( 'admin_init', 'woo_st_init' );
 
+	function woo_st_enqueue_scripts( $hook ) {
+
+		$page = 'woocommerce_page_woo_st';
+		if( $page == $hook ) {
+			wp_enqueue_style( 'woo_st_styles', plugins_url( '/templates/admin/woo-admin_st-toolkit.css', __FILE__ ) );
+		}
+
+	}
+	add_action( 'admin_enqueue_scripts', 'woo_st_enqueue_scripts' );
+
 	function woo_st_default_html_page() {
 
-		global $wpdb, $woo_st;
+		global $woo_st, $wpdb;
 
-		$products = woo_st_return_count( 'products' );
-		$categories = woo_st_return_count( 'categories' );
-		$tags = woo_st_return_count( 'tags' );
-		$images = woo_st_return_count( 'images' );
-		$orders = woo_st_return_count( 'orders' );
-		$coupons = woo_st_return_count( 'coupons' );
-		$credit_cards = woo_st_return_count( 'credit-cards' );
-		$attributes = woo_st_return_count( 'attributes' );
+		$tab = false;
+		if( isset( $_GET['tab'] ) )
+			$tab = $_GET['tab'];
 
 		include_once( 'templates/admin/woo-admin_st-toolkit.php' );
 
@@ -84,6 +120,7 @@ if( is_admin() ) {
 		global $wpdb;
 
 		woo_st_template_header();
+		woo_st_support_donate();
 		$action = woo_get_action();
 		switch( $action ) {
 
