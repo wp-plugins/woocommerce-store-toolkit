@@ -13,6 +13,7 @@
 			<h3 class="hndle"><?php _e( 'Empty WooCommerce Tables', 'woo_st' ); ?></h3>
 			<div class="inside">
 				<p class="description"><?php _e( 'Permanently remove WooCommerce details.', 'woo_st' ); ?></p>
+				<p><a href="javascript:void(0)" id="woocommerce-checkall"><?php _e( 'Check All', 'jigo_st' ); ?></a> | <a href="javascript:void(0)" id="woocommerce-uncheckall"><?php _e( 'Uncheck All', 'jigo_st' ); ?></a></p>
 				<table class="form-table">
 
 					<tr>
@@ -123,10 +124,11 @@
 		</div>
 		<!-- .postbox -->
 
-		<div class="postbox">
-			<h3 class="hndle" id="empty-wordpress-tables"><?php _e( 'Empty WordPress Tables', 'woo_st' ); ?></h3>
+		<div class="postbox" id="empty-wordpress-tables">
+			<h3 class="hndle"><?php _e( 'Empty WordPress Tables', 'woo_st' ); ?></h3>
 			<div class="inside">
 				<p class="description"><?php _e( 'Permanently remove WordPress details.', 'woo_st' ); ?></p>
+				<p><a href="javascript:void(0)" id="wordpress-checkall"><?php _e( 'Check All', 'jigo_st' ); ?></a> | <a href="javascript:void(0)" id="wordpress-uncheckall"><?php _e( 'Uncheck All', 'jigo_st' ); ?></a></p>
 				<table class="form-table">
 
 					<tr>

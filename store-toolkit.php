@@ -3,7 +3,7 @@
 Plugin Name: WooCommerce - Store Toolkit
 Plugin URI: http://www.visser.com.au/woocommerce/plugins/store-toolkit/
 Description: Permanently remove all store-generated details of your WooCommerce store.
-Version: 1.3.2
+Version: 1.3.4
 Author: Visser Labs
 Author URI: http://www.visser.com.au/about/
 License: GPL2
@@ -43,6 +43,17 @@ if( is_admin() ) {
 
 	}
 	add_filter( 'plugin_action_links', 'woo_st_add_settings_link', 10, 2 );
+
+	function woo_st_enqueue_scripts( $hook ) {
+
+		$page = 'woocommerce_page_woo_st';
+		if( $page == $hook ) {
+			wp_enqueue_style( 'woo_st_styles', plugins_url( '/templates/admin/woo-admin_st-toolkit.css', __FILE__ ) );
+			wp_enqueue_script( 'woo_st_scripts', plugins_url( '/templates/admin/woo-admin_st-toolkit.js', __FILE__ ), array( 'jquery' ) );
+		}
+
+	}
+	add_action( 'admin_enqueue_scripts', 'woo_st_enqueue_scripts' );
 
 	function woo_st_init() {
 
@@ -92,16 +103,6 @@ if( is_admin() ) {
 
 	}
 	add_action( 'admin_init', 'woo_st_init' );
-
-	function woo_st_enqueue_scripts( $hook ) {
-
-		$page = 'woocommerce_page_woo_st';
-		if( $page == $hook ) {
-			wp_enqueue_style( 'woo_st_styles', plugins_url( '/templates/admin/woo-admin_st-toolkit.css', __FILE__ ) );
-		}
-
-	}
-	add_action( 'admin_enqueue_scripts', 'woo_st_enqueue_scripts' );
 
 	function woo_st_default_html_page() {
 

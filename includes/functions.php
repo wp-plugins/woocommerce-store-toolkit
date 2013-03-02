@@ -68,6 +68,10 @@ if( is_admin() ) {
 				$count = wp_count_posts( $post_type );
 				break;
 
+			case 'images':
+				$count_sql = "SELECT COUNT(`post_id`) FROM `" . $wpdb->postmeta . "` WHERE `meta_key` = '_woocommerce_exclude_image'";
+				break;
+
 			case 'categories':
 				$term_taxonomy = 'product_cat';
 				$count = wp_count_terms( $term_taxonomy );
@@ -81,10 +85,6 @@ if( is_admin() ) {
 			case 'orders':
 				$post_type = 'shop_order';
 				$count = wp_count_posts( $post_type );
-				break;
-
-			case 'images':
-				$count_sql = "SELECT COUNT(`post_id`) FROM `" . $wpdb->postmeta . "` WHERE `meta_key` = '_woocommerce_exclude_image'";
 				break;
 
 			case 'coupons':
@@ -302,6 +302,8 @@ if( is_admin() ) {
 					$wpdb->query( "DELETE FROM `" . $wpdb->prefix . "woocommerce_attribute_taxonomies`" );
 				}
 				break;
+
+			/* 3rd Party */
 
 			case 'credit-cards':
 				$post_type = 'offline_payment';
