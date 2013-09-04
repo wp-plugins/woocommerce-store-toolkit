@@ -3,7 +3,7 @@
 Plugin Name: WooCommerce - Store Toolkit
 Plugin URI: http://www.visser.com.au/woocommerce/plugins/store-toolkit/
 Description: Permanently remove all store-generated details of your WooCommerce store.
-Version: 1.3.4
+Version: 1.3.5
 Author: Visser Labs
 Author URI: http://www.visser.com.au/about/
 License: GPL2
@@ -46,6 +46,7 @@ if( is_admin() ) {
 
 	function woo_st_enqueue_scripts( $hook ) {
 
+		/* Settings */
 		$page = 'woocommerce_page_woo_st';
 		if( $page == $hook ) {
 			wp_enqueue_style( 'woo_st_styles', plugins_url( '/templates/admin/woo-admin_st-toolkit.css', __FILE__ ) );
@@ -64,28 +65,35 @@ if( is_admin() ) {
 				if( !ini_get( 'safe_mode' ) )
 					set_time_limit( 0 );
 
+				/* WooCommerce */
 				if( isset( $_POST['woo_st_products'] ) )
 					woo_st_clear_dataset( 'products' );
-				if( isset( $_POST['woo_st_product_categories'] ) )
+				if( isset( $_POST['woo_st_categories'] ) ) {
+					$categories = $_POST['woo_st_categories'];
+					woo_st_clear_dataset( 'categories', $categories );
+				} else if( isset( $_POST['woo_st_product_categories'] ) ) {
 					woo_st_clear_dataset( 'categories' );
+				}
 				if( isset( $_POST['woo_st_product_tags'] ) )
 					woo_st_clear_dataset( 'tags' );
 				if( isset( $_POST['woo_st_product_images'] ) )
 					woo_st_clear_dataset( 'images' );
-				if( isset( $_POST['woo_st_sales_orders'] ) )
-					woo_st_clear_dataset( 'orders' );
 				if( isset( $_POST['woo_st_coupons'] ) )
 					woo_st_clear_dataset( 'coupons' );
 				if( isset( $_POST['woo_st_attributes'] ) )
 					woo_st_clear_dataset( 'attributes' );
+				if( isset( $_POST['woo_st_orders'] ) ) {
+					$orders = $_POST['woo_st_orders'];
+					woo_st_clear_dataset( 'orders', $orders );
+				} else if( isset( $_POST['woo_st_sales_orders'] ) ) {
+					woo_st_clear_dataset( 'orders' );
+				}
+
+				/* 3rd Party */
 				if( isset( $_POST['woo_st_creditcards'] ) )
 					woo_st_clear_dataset( 'credit-cards' );
 
-				if( isset( $_POST['woo_st_categories'] ) ) {
-					$categories = $_POST['woo_st_categories'];
-					woo_st_clear_dataset( 'categories', $categories );
-				}
-
+				/* WordPress */
 				if( isset( $_POST['woo_st_posts'] ) )
 					woo_st_clear_dataset( 'posts' );
 				if( isset( $_POST['woo_st_post_categories'] ) )

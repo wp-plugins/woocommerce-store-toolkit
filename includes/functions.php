@@ -6,22 +6,21 @@ if( is_admin() ) {
 	/* WordPress Administration menu */
 	function woo_st_admin_menu() {
 
-		add_submenu_page( 'woocommerce', __( 'Store Toolkit', 'woo_st' ), __( 'Store Toolkit', 'woo_st' ), 'manage_options', 'woo_st', 'woo_st_html_page' );
+		add_submenu_page( 'woocommerce', __( 'Store Toolkit', 'woo_st' ), __( 'Store Toolkit', 'woo_st' ), 'manage_woocommerce', 'woo_st', 'woo_st_html_page' );
 
 	}
 	add_action( 'admin_menu', 'woo_st_admin_menu', 11 );
 
-	function woo_st_template_header( $title = '', $icon = 'tools' ) {
+	function woo_st_template_header( $title = '', $icon = 'woocommerce' ) {
 
 		global $woo_st;
 
 		if( $title )
 			$output = $title;
 		else
-			$output = $woo_st['menu'];
-		$icon = woo_is_admin_icon_valid( $icon ); ?>
+			$output = $woo_st['menu']; ?>
 <div class="wrap">
-	<div id="icon-<?php echo $icon; ?>" class="icon32"><br /></div>
+	<div id="icon-<?php echo $icon; ?>" class="icon32 icon32-woocommerce-settings"><br /></div>
 	<h2><?php echo $output; ?></h2>
 <?php
 	}
@@ -255,15 +254,37 @@ if( is_admin() ) {
 
 			case 'orders':
 				$post_type = 'shop_order';
-				$orders = (array)get_posts( array(
-					'post_type' => $post_type,
-					'post_status' => woo_st_post_statuses(),
-					'numberposts' => -1
-				) );
-				if( $orders ) {
-					foreach( $orders as $order ) {
-						if( isset( $order->ID ) )
-							wp_delete_post( $order->ID, true );
+				$term_taxonomy = 'shop_order_status';
+				if( $data ) {
+					foreach( $data as $single_order ) {
+						$args = array(
+							'post_type' => $post_type,
+							'tax_query' => array(
+								array(
+									'taxonomy' => $term_taxonomy,
+									'field' => 'id',
+									'terms' => $single_order
+								)
+							),
+							'numberposts' => -1
+						);
+						$orders = get_posts( $args );
+						if( $orders ) {
+							foreach( $orders as $order )
+								wp_delete_post( $order->ID, true );
+						}
+					}
+				} else {
+					$orders = (array)get_posts( array(
+						'post_type' => $post_type,
+						'post_status' => woo_st_post_statuses(),
+						'numberposts' => -1
+					) );
+					if( $orders ) {
+						foreach( $orders as $order ) {
+							if( isset( $order->ID ) )
+								wp_delete_post( $order->ID, true );
+						}
 					}
 				}
 				break;
@@ -444,6 +465,13 @@ if( is_admin() ) {
 					$categories_data = get_terms( $term_taxonomy, $args );
 				}
 				$orders = woo_st_return_count( 'orders' );
+				if( $orders ) {
+					$term_taxonomy = 'shop_order_status';
+					$args = array(
+						'hide_empty' => 0
+					);
+					$orders_data = get_terms( $term_taxonomy, $args );
+				}
 				$coupons = woo_st_return_count( 'coupons' );
 
 				$credit_cards = woo_st_return_count( 'credit-cards' );
@@ -464,6 +492,46 @@ if( is_admin() ) {
 		}
 		if( $tab )
 			include_once( $woo_st['abspath'] . '/templates/admin/woo-admin_st-toolkit_' . $tab . '.php' );
+
+	}
+
+	function woo_st_convert_sale_status( $sale_status = '' ) {
+
+		$output = $sale_status;
+		if( $sale_status ) {
+			switch( $sale_status ) {
+
+				case 'cancelled':
+					$output = __( 'Cancelled', 'woo_st' );
+					break;
+
+				case 'completed':
+					$output = __( 'Completed', 'woo_st' );
+					break;
+
+				case 'on-hold':
+					$output = __( 'On-Hold', 'woo_st' );
+					break;
+
+				case 'pending':
+					$output = __( 'Pending', 'woo_st' );
+					break;
+
+				case 'processing':
+					$output = __( 'Processing', 'woo_st' );
+					break;
+
+				case 'refunded':
+					$output = __( 'Refunded', 'woo_st' );
+					break;
+
+				case 'failed':
+					$output = __( 'Failed', 'woo_st' );
+					break;
+
+			}
+		}
+		return $output;
 
 	}
 

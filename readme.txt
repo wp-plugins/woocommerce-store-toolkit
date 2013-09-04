@@ -4,8 +4,8 @@ Contributors: visser
 Donate link: http://www.visser.com.au/#donations
 Tags: woocommerce, mod, delete store, clean store, nuke
 Requires at least: 2.9.2
-Tested up to: 3.5.1
-Stable tag: 1.3.4
+Tested up to: 3.7
+Stable tag: 1.3.5
 
 == Description ==
 
@@ -40,6 +40,10 @@ If you have any problems, questions or suggestions please join the members discu
 http://www.visser.com.au/woocommerce/forums/
 
 == Changelog ==
+
+= 1.3.5 =
+* Changed: Removed woo_admin_is_valid_icon
+* Changed: Using default WooCommerce icons
 
 = 1.3.4 =
 * Added: Select All options to Nuke
