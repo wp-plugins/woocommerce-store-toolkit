@@ -2,8 +2,8 @@
 /*
 Plugin Name: WooCommerce - Store Toolkit
 Plugin URI: http://www.visser.com.au/woocommerce/plugins/store-toolkit/
-Description: Permanently remove all store-generated details of your WooCommerce store.
-Version: 1.3.5
+Description: Store Toolkit includes a growing set of commonly-used WooCommerce administration tools aimed at web developers and store maintainers.
+Version: 1.3.6
 Author: Visser Labs
 Author URI: http://www.visser.com.au/about/
 License: GPL2

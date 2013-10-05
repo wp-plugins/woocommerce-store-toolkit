@@ -5,7 +5,7 @@ Donate link: http://www.visser.com.au/#donations
 Tags: woocommerce, mod, delete store, clean store, nuke
 Requires at least: 2.9.2
 Tested up to: 3.7
-Stable tag: 1.3.5
+Stable tag: 1.3.6
 
 == Description ==
 
@@ -40,6 +40,10 @@ If you have any problems, questions or suggestions please join the members discu
 http://www.visser.com.au/woocommerce/forums/
 
 == Changelog ==
+
+= 1.3.6 =
+* Changed: Plugin description
+* Fixed: Updated URL for WooCommerce Plugin News widget
 
 = 1.3.5 =
 * Changed: Removed woo_admin_is_valid_icon
