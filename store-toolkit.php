@@ -3,7 +3,7 @@
 Plugin Name: WooCommerce - Store Toolkit
 Plugin URI: http://www.visser.com.au/woocommerce/plugins/store-toolkit/
 Description: Store Toolkit includes a growing set of commonly-used WooCommerce administration tools aimed at web developers and store maintainers.
-Version: 1.3.6
+Version: 1.3.7
 Author: Visser Labs
 Author URI: http://www.visser.com.au/about/
 License: GPL2
@@ -46,12 +46,15 @@ if( is_admin() ) {
 
 	function woo_st_enqueue_scripts( $hook ) {
 
+		global $woocommerce;
+
 		/* Settings */
 		$page = 'woocommerce_page_woo_st';
 		if( $page == $hook ) {
 			wp_enqueue_style( 'woo_st_styles', plugins_url( '/templates/admin/woo-admin_st-toolkit.css', __FILE__ ) );
 			wp_enqueue_script( 'woo_st_scripts', plugins_url( '/templates/admin/woo-admin_st-toolkit.js', __FILE__ ), array( 'jquery' ) );
 		}
+		wp_enqueue_style( 'woocommerce_admin_styles', $woocommerce->plugin_url() . '/assets/css/admin.css' );
 
 	}
 	add_action( 'admin_enqueue_scripts', 'woo_st_enqueue_scripts' );

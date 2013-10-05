@@ -106,7 +106,7 @@
 			<h3 class="hndle" id="empty-product-by-category"><?php _e( 'Empty Products by Product Category', 'woo_st' ); ?></h3>
 			<div class="inside">
 <?php if( $categories ) { ?>
-				<p><?php _e( 'Remove Products from specific Product Categories by selecting the Product Categories below, then click Remove to permanently remove those Products.', 'woo_st' ); ?></p>
+				<p class="description"><?php _e( 'Remove Products from specific Product Categories by selecting the Product Categories below, then click Remove to permanently remove those Products.', 'woo_st' ); ?></p>
 				<ul>
 	<?php foreach( $categories_data as $category_single ) { ?>
 					<li>
@@ -131,7 +131,7 @@
 			<h3 class="hndle" id="delete-sales-by-sale-status"><?php _e( 'Delete Orders by Order Status', 'woo_st' ); ?></h3>
 			<div class="inside">
 <?php if( $orders ) { ?>
-				<p><?php _e( 'Remove Orders based on the Order Status by selecting the the Order Status below, then click Remove to permanently remove those Orders.', 'woo_st' ); ?></p>
+				<p class="description"><?php _e( 'Remove Orders based on the Order Status by selecting the the Order Status below, then click Remove to permanently remove those Orders.', 'woo_st' ); ?></p>
 				<ul>
 	<?php foreach( $orders_data as $order_single ) { ?>
 					<li>

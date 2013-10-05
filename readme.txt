@@ -5,7 +5,7 @@ Donate link: http://www.visser.com.au/#donations
 Tags: woocommerce, mod, delete store, clean store, nuke
 Requires at least: 2.9.2
 Tested up to: 3.7
-Stable tag: 1.3.6
+Stable tag: 1.3.7
 
 == Description ==
 
@@ -40,6 +40,11 @@ If you have any problems, questions or suggestions please join the members discu
 http://www.visser.com.au/woocommerce/forums/
 
 == Changelog ==
+
+= 1.3.7 =
+* Fixed: Missing icon
+* Changed: Layout styling of descriptions on Nuke screen
+* Added: Screenshots to Plugin page
 
 = 1.3.6 =
 * Changed: Plugin description
@@ -76,6 +81,12 @@ http://www.visser.com.au/woocommerce/forums/
 = 1.0 =
 * Added: Delete Products, Product Categories, Tags and Orders
 * Added: First working release of the Plugin
+
+== Screenshots ==
+
+1. The Store Toolkit overview screen
+2. The Nuke WooCommerce screen with 'nuke' options
+3. Additional 'nuke' options for WordPress details
 
 == Disclaimer ==
 
