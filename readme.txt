@@ -11,9 +11,24 @@ Stable tag: 1.3.7
 
 Store Toolkit includes a growing set of commonly-used WooCommerce administration tools aimed at web developers and store maintainers.
 
-Features include:
+**Features**
 
-* Nuke support for clearing WooCommerce store records; Products, Product Images, Tags, Categories, Sales, Coupons, etc.
+1. Nuke support for clearing WooCommerce store records
+
+* Products
+* Product Images
+* Produt Tags
+* Product Categories
+* Orders
+* Coupons
+
+2. Nuke support for clearing WordPress records
+
+* Posts
+* Post Categories
+* Post Tags
+* Links
+* Comments
 
 If you find yourself in the situation where you need to start over with a fresh installation of WooCommerce then a 'nuke' will do the job.
 
@@ -36,9 +51,11 @@ Done!
 == Frequently Asked Questions ==
 
 **Where can I request new features?**
+
 You can vote on and request new features and extensions on our Support Forum, see http://www.visser.com.au
 
 **Where can I report bugs or contribute to the project?**
+
 Bugs can be reported here on WordPress.org or on our Support Forum, see http://www.visser.com.au
 
 == Support ==
