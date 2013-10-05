@@ -33,6 +33,14 @@ That's it!
 
 Done!
 
+== Frequently Asked Questions ==
+
+- Where can I request new features? -
+You can vote on and request new features and extensions on our Support Forum, see http://www.visser.com.au.
+
+- Where can I report bugs or contribute to the project? -
+Bugs can be reported here on WordPress.org or on our Support Forum, see http://www.visser.com.au.
+
 == Support ==
 
 If you have any problems, questions or suggestions please join the members discussion on my WooCommerce dedicated forum.
