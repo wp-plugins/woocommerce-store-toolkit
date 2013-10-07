@@ -2,7 +2,7 @@
 
 Contributors: visser
 Donate link: http://www.visser.com.au/#donations
-Tags: woocommerce, mod, delete store, clean store, nuke
+Tags: woocommerce, mod, delete store, clean store, nuke, store toolkit
 Requires at least: 2.9.2
 Tested up to: 3.7
 Stable tag: 1.3.7
@@ -109,9 +109,9 @@ http://www.visser.com.au/woocommerce/forums/
 
 == Screenshots ==
 
-1. The Store Toolkit overview screen
-2. The Nuke WooCommerce screen with 'nuke' options
-3. Additional 'nuke' options for WordPress details
+1. The Store Toolkit overview screen.
+2. The Nuke WooCommerce screen with 'nuke' options.
+3. Additional 'nuke' options for WordPress details.
 
 == Disclaimer ==
 
