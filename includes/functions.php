@@ -67,7 +67,7 @@ if( is_admin() ) {
 				$count = wp_count_posts( $post_type );
 				break;
 
-			case 'images':
+			case 'product_images':
 				$count_sql = "SELECT COUNT(`post_id`) FROM `" . $wpdb->postmeta . "` WHERE `meta_key` = '_woocommerce_exclude_image'";
 				break;
 
@@ -127,6 +127,10 @@ if( is_admin() ) {
 				$count = wp_count_comments();
 				break;
 
+			case 'media_images':
+				$count_sql = "SELECT COUNT(`ID`) FROM `" . $wpdb->posts . "` WHERE `post_mime_type` LIKE 'image%'";
+				break;
+
 		}
 		if( isset( $count ) || $count_sql ) {
 			if( isset( $count ) ) {
@@ -157,12 +161,13 @@ if( is_admin() ) {
 
 			case 'products':
 				$post_type = 'product';
-				$products = get_posts( array(
+				$args = array(
 					'post_type' => $post_type,
 					'fields' => 'ids',
 					'post_status' => woo_st_post_statuses(),
 					'numberposts' => -1
-				) );
+				);
+				$products = get_posts( $args );
 				if( $products ) {
 					foreach( $products as $product ) {
 						wp_delete_post( $product, true );
@@ -174,6 +179,7 @@ if( is_admin() ) {
 								wp_set_object_terms( $product, null, 'pa_' . $attribute->name );
 						}
 					}
+					unset( $products, $product );
 				}
 				break;
 
@@ -198,8 +204,10 @@ if( is_admin() ) {
 						if( $products ) {
 							foreach( $products as $product )
 								wp_delete_post( $product, true );
+							unset( $products, $product );
 						}
 					}
+					unset( $data, $single_category );
 				} else {
 					$args = array(
 						'hide_empty' => false
@@ -214,6 +222,7 @@ if( is_admin() ) {
 							if( function_exists( 'delete_woocommerce_term_meta' ) )
 								delete_woocommerce_term_meta( $category->term_id, 'thumbnail_id' );
 						}
+						unset( $categories, $category );
 					}
 					$wpdb->query( $wpdb->prepare( "DELETE FROM `" . $wpdb->term_taxonomy . "` WHERE `taxonomy` = '%s'", $term_taxonomy ) );
 				}
@@ -234,14 +243,15 @@ if( is_admin() ) {
 				}
 				break;
 
-			case 'images':
+			case 'product_images':
 				$post_type = 'product';
-				$products = get_posts( array(
+				$args = array(
 					'post_type' => $post_type,
 					'fields' => 'ids',
 					'post_status' => woo_st_post_statuses(),
 					'numberposts' => -1
-				) );
+				);
+				$products = get_posts( $args );
 				if( $products ) {
 					$upload_dir = wp_upload_dir();
 					foreach( $products as $product ) {
@@ -283,8 +293,10 @@ if( is_admin() ) {
 						if( $orders ) {
 							foreach( $orders as $order )
 								wp_delete_post( $order, true );
+							unset( $orders, $order );
 						}
 					}
+					unset( $data, $single_order );
 				} else {
 					$args = array(
 						'post_type' => $post_type,
@@ -296,6 +308,7 @@ if( is_admin() ) {
 					if( $orders ) {
 						foreach( $orders as $order )
 							wp_delete_post( $order, true );
+						unset( $orders, $order );
 					}
 				}
 				break;
@@ -311,6 +324,7 @@ if( is_admin() ) {
 				if( $coupons ) {
 					foreach( $coupons as $coupon )
 						wp_delete_post( $coupon, true );
+					unset( $coupons, $coupon );
 				}
 				break;
 
@@ -348,6 +362,7 @@ if( is_admin() ) {
 				if( $credit_cards ) {
 					foreach( $credit_cards as $credit_card )
 						wp_delete_post( $credit_card, true );
+					unset( $credit_cards, $credit_card );
 				}
 				break;
 
@@ -365,6 +380,7 @@ if( is_admin() ) {
 				if( $posts ) {
 					foreach( $posts as $post )
 						wp_delete_post( $post, true );
+					unset( $posts, $post );
 				}
 				break;
 
@@ -407,10 +423,26 @@ if( is_admin() ) {
 			case 'comments':
 				$comments = get_comments();
 				if( $comments ) {
-					foreach( $comments as $comment ) {
-						if( $comment->comment_ID )
-							wp_delete_comment( $comment->comment_ID, true );
-					}
+					foreach( $comments as $comment )
+						wp_delete_comment( $comment->comment_ID, true );
+					unset( $comments, $comment );
+				}
+				break;
+
+			case 'media_images':
+				$post_type = 'attachment';
+				$args = array(
+					'post_type' => $post_type,
+					'fields' => 'ids',
+					'post_mime_type' => array( 'image/jpg', 'image/jpeg', 'image/jpe', 'image/gif', 'image/png' ),
+					'post_status' => woo_st_post_statuses(),
+					'numberposts' => -1,
+				);
+				$images = get_posts( $args );
+				if( $images ) {
+					foreach( $images as $image )
+						wp_delete_attachment( $image, true );
+					unset( $images, $image );
 				}
 				break;
 
@@ -470,7 +502,7 @@ if( is_admin() ) {
 
 			case 'nuke':
 				$products = woo_st_return_count( 'products' );
-				$images = woo_st_return_count( 'images' );
+				$images = woo_st_return_count( 'product_images' );
 				$tags = woo_st_return_count( 'tags' );
 				$categories = woo_st_return_count( 'categories' );
 				if( $categories ) {
@@ -498,11 +530,11 @@ if( is_admin() ) {
 				$post_tags = woo_st_return_count( 'post_tags' );
 				$links = woo_st_return_count( 'links' );
 				$comments = woo_st_return_count( 'comments' );
+				$media_images = woo_st_return_count( 'media_images' );
 
+				$show_table = false;
 				if( $products || $images || $tags || $categories || $orders || $credit_cards || $attributes )
 					$show_table = true;
-				else
-					$show_table = false;
 				break;
 
 		}

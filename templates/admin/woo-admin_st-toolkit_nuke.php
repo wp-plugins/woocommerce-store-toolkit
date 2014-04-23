@@ -205,6 +205,15 @@
 							</td>
 						</tr>
 
+						<tr>
+							<th>
+								<label for="comments"><?php _e( 'Media: Images', 'woo_st' ); ?></label>
+							</th>
+							<td>
+								<input type="checkbox" id="links" name="woo_st_media_images"<?php echo disabled( $media_images, 0 ); ?> /> (<?php echo $media_images; ?>)
+							</td>
+						</tr>
+
 					</table>
 				</fieldset>
 				<p class="submit">

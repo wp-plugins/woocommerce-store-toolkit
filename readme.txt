@@ -5,7 +5,7 @@ Donate link: http://www.visser.com.au/#donations
 Tags: woocommerce, mod, delete store, clean store, nuke, store toolkit
 Requires at least: 2.9.2
 Tested up to: 3.9
-Stable tag: 1.3.9
+Stable tag: 1.4
 
 == Description ==
 
@@ -29,6 +29,7 @@ Store Toolkit includes a growing set of commonly-used WooCommerce administration
 * Post Tags
 * Links
 * Comments
+* Media: Images
 
 3. WooCommerce maintainence/debugging tools
 
@@ -71,6 +72,9 @@ If you have any problems, questions or suggestions please join the members discu
 http://www.visser.com.au/woocommerce/forums/
 
 == Changelog ==
+
+= 1.4 =
+* Added: Support for nuking all images within WordPress Media
 
 = 1.3.9 =
 * Fixed: Reduced memory usage when bulk deleting large catalogues

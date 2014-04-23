@@ -3,7 +3,7 @@
 Plugin Name: WooCommerce - Store Toolkit
 Plugin URI: http://www.visser.com.au/woocommerce/plugins/store-toolkit/
 Description: Store Toolkit includes a growing set of commonly-used WooCommerce administration tools aimed at web developers and store maintainers.
-Version: 1.3.9
+Version: 1.4
 Author: Visser Labs
 Author URI: http://www.visser.com.au/about/
 License: GPL2
@@ -91,7 +91,7 @@ if( is_admin() ) {
 				if( isset( $_POST['woo_st_product_tags'] ) )
 					woo_st_clear_dataset( 'tags' );
 				if( isset( $_POST['woo_st_product_images'] ) )
-					woo_st_clear_dataset( 'images' );
+					woo_st_clear_dataset( 'product_images' );
 				if( isset( $_POST['woo_st_coupons'] ) )
 					woo_st_clear_dataset( 'coupons' );
 				if( isset( $_POST['woo_st_attributes'] ) )
@@ -118,6 +118,8 @@ if( is_admin() ) {
 					woo_st_clear_dataset( 'links' );
 				if( isset( $_POST['woo_st_comments'] ) )
 					woo_st_clear_dataset( 'comments' );
+				if( isset( $_POST['woo_st_media_images'] ) )
+					woo_st_clear_dataset( 'media_images' );
 
 				break;
 
