@@ -4,8 +4,8 @@ Contributors: visser
 Donate link: http://www.visser.com.au/#donations
 Tags: woocommerce, mod, delete store, clean store, nuke, store toolkit
 Requires at least: 2.9.2
-Tested up to: 3.7
-Stable tag: 1.3.7
+Tested up to: 3.9
+Stable tag: 1.3.8
 
 == Description ==
 
@@ -29,6 +29,12 @@ Store Toolkit includes a growing set of commonly-used WooCommerce administration
 * Post Tags
 * Links
 * Comments
+
+3. WooCommerce maintainence/debugging tools
+
+* All in One SEO Pack integration
+* Order Meta widget on Orders screen
+* Product Meta widget on Products screen
 
 If you find yourself in the situation where you need to start over with a fresh installation of WooCommerce then a 'nuke' will do the job.
 
@@ -65,6 +71,10 @@ If you have any problems, questions or suggestions please join the members discu
 http://www.visser.com.au/woocommerce/forums/
 
 == Changelog ==
+
+= 1.3.8 =
+* Added: Order Meta widget on Orders screen
+* Added: Order Cart Item widget on Orders screen
 
 = 1.3.7 =
 * Fixed: Missing icon

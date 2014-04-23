@@ -3,7 +3,7 @@ if( is_admin() ) {
 
 	/* Start of: WordPress Administration */
 
-	/* WordPress Administration menu */
+	// WordPress Administration menu
 	function woo_st_admin_menu() {
 
 		add_submenu_page( 'woocommerce', __( 'Store Toolkit', 'woo_st' ), __( 'Store Toolkit', 'woo_st' ), 'manage_woocommerce', 'woo_st', 'woo_st_html_page' );
@@ -60,7 +60,7 @@ if( is_admin() ) {
 		$count_sql = null;
 		switch( $dataset ) {
 
-			/* WooCommerce */
+			// WooCommerce
 
 			case 'products':
 				$post_type = 'product';
@@ -95,14 +95,14 @@ if( is_admin() ) {
 				$count_sql = "SELECT COUNT(`attribute_id`) FROM `" . $wpdb->prefix . "woocommerce_attribute_taxonomies`";
 				break;
 
-			/* 3rd Party */
+			// 3rd Party
 
 			case 'credit-cards':
 				$post_type = 'offline_payment';
 				$count = wp_count_posts( $post_type );
 				break;
 
-			/* WordPress */
+			// WordPress
 
 			case 'posts':
 				$post_type = 'post';
@@ -153,7 +153,7 @@ if( is_admin() ) {
 
 		switch( $dataset ) {
 
-			/* WooCommerce */
+			// WooCommerce
 
 			case 'products':
 				$post_type = 'product';
@@ -324,7 +324,7 @@ if( is_admin() ) {
 				}
 				break;
 
-			/* 3rd Party */
+			// 3rd Party
 
 			case 'credit-cards':
 				$post_type = 'offline_payment';
@@ -341,7 +341,7 @@ if( is_admin() ) {
 				}
 				break;
 
-			/* WordPress */
+			// WordPress
 
 			case 'posts':
 				$post_type = 'post';
