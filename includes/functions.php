@@ -157,20 +157,21 @@ if( is_admin() ) {
 
 			case 'products':
 				$post_type = 'product';
-				$products = (array)get_posts( array(
+				$products = get_posts( array(
 					'post_type' => $post_type,
+					'fields' => 'ids',
 					'post_status' => woo_st_post_statuses(),
 					'numberposts' => -1
 				) );
 				if( $products ) {
 					foreach( $products as $product ) {
-						wp_delete_post( $product->ID, true );
-						wp_set_object_terms( $product->ID, null, 'product_tag' );
+						wp_delete_post( $product, true );
+						wp_set_object_terms( $product, null, 'product_tag' );
 						$attributes_sql = "SELECT `attribute_id` as ID, `attribute_name` as name, `attribute_label` as label, `attribute_type` as type FROM `" . $wpdb->prefix . "woocommerce_attribute_taxonomies`";
 						$attributes = $wpdb->get_results( $attributes_sql );
 						if( $attributes ) {
 							foreach( $attributes as $attribute )
-								wp_set_object_terms( $product->ID, null, 'pa_' . $attribute->name );
+								wp_set_object_terms( $product, null, 'pa_' . $attribute->name );
 						}
 					}
 				}
@@ -183,6 +184,7 @@ if( is_admin() ) {
 						$post_type = 'product';
 						$args = array(
 							'post_type' => $post_type,
+							'fields' => 'ids',
 							'tax_query' => array(
 								array(
 									'taxonomy' => $term_taxonomy,
@@ -195,18 +197,22 @@ if( is_admin() ) {
 						$products = get_posts( $args );
 						if( $products ) {
 							foreach( $products as $product )
-								wp_delete_post( $product->ID, true );
+								wp_delete_post( $product, true );
 						}
 					}
 				} else {
-					$categories = get_terms( $term_taxonomy, array( 'hide_empty' => false ) );
+					$args = array(
+						'hide_empty' => false
+					);
+					$categories = get_terms( $term_taxonomy, $args );
 					if( $categories ) {
 						foreach( $categories as $category ) {
 							wp_delete_term( $category->term_id, $term_taxonomy );
 							$wpdb->query( $wpdb->prepare( "DELETE FROM `" . $wpdb->terms . "` WHERE `term_id` = %d", $category->term_id ) );
 							$wpdb->query( $wpdb->prepare( "DELETE FROM `" . $wpdb->term_relationships . "` WHERE `term_taxonomy_id` = %d", $category->term_taxonomy_id ) );
 							$wpdb->query( $wpdb->prepare( "DELETE FROM `" . $wpdb->prefix . "woocommerce_termmeta` WHERE `woocommerce_term_id` = %d", $category->term_id ) );
-							delete_woocommerce_term_meta( $category->term_id, 'thumbnail_id' );
+							if( function_exists( 'delete_woocommerce_term_meta' ) )
+								delete_woocommerce_term_meta( $category->term_id, 'thumbnail_id' );
 						}
 					}
 					$wpdb->query( $wpdb->prepare( "DELETE FROM `" . $wpdb->term_taxonomy . "` WHERE `taxonomy` = '%s'", $term_taxonomy ) );
@@ -215,19 +221,24 @@ if( is_admin() ) {
 
 			case 'tags':
 				$term_taxonomy = 'product_tag';
-				$tags = get_terms( $term_taxonomy, array( 'hide_empty' => false ) );
+				$args = array(
+					'fields' => 'ids',
+					'hide_empty' => false
+				);
+				$tags = get_terms( $term_taxonomy, $args );
 				if( $tags ) {
 					foreach( $tags as $tag ) {
-						wp_delete_term( $tag->term_id, $term_taxonomy );
-						$wpdb->query( $wpdb->prepare( "DELETE FROM `" . $wpdb->terms . "` WHERE `term_id` = %d", $tag->term_id ) );
+						wp_delete_term( $tag, $term_taxonomy );
+						$wpdb->query( $wpdb->prepare( "DELETE FROM `" . $wpdb->terms . "` WHERE `term_id` = %d", $tag ) );
 					}
 				}
 				break;
 
 			case 'images':
 				$post_type = 'product';
-				$products = (array)get_posts( array(
+				$products = get_posts( array(
 					'post_type' => $post_type,
+					'fields' => 'ids',
 					'post_status' => woo_st_post_statuses(),
 					'numberposts' => -1
 				) );
@@ -236,16 +247,15 @@ if( is_admin() ) {
 					foreach( $products as $product ) {
 						$args = array(
 							'post_type' => 'attachment',
-							'post_parent' => $product->ID,
+							'post_parent' => $product,
 							'post_status' => 'inherit',
 							'post_mime_type' => 'image',
 							'numberposts' => -1
 						);
 						$images = get_children( $args );
-						if( $images ) {
-							foreach( $images as $image ) {
+						if( !empty( $images ) ) {
+							foreach( $images as $image )
 								wp_delete_attachment( $image->ID, true );
-							}
 							unset( $images, $image );
 						}
 					}
@@ -259,6 +269,7 @@ if( is_admin() ) {
 					foreach( $data as $single_order ) {
 						$args = array(
 							'post_type' => $post_type,
+							'fields' => 'ids',
 							'tax_query' => array(
 								array(
 									'taxonomy' => $term_taxonomy,
@@ -271,36 +282,35 @@ if( is_admin() ) {
 						$orders = get_posts( $args );
 						if( $orders ) {
 							foreach( $orders as $order )
-								wp_delete_post( $order->ID, true );
+								wp_delete_post( $order, true );
 						}
 					}
 				} else {
-					$orders = (array)get_posts( array(
+					$args = array(
 						'post_type' => $post_type,
+						'fields' => 'ids',
 						'post_status' => woo_st_post_statuses(),
 						'numberposts' => -1
-					) );
+					);
+					$orders = get_posts( $args );
 					if( $orders ) {
-						foreach( $orders as $order ) {
-							if( isset( $order->ID ) )
-								wp_delete_post( $order->ID, true );
-						}
+						foreach( $orders as $order )
+							wp_delete_post( $order, true );
 					}
 				}
 				break;
 
 			case 'coupons':
 				$post_type = 'shop_coupon';
-				$coupons = (array)get_posts( array(
+				$coupons = get_posts( array(
 					'post_type' => $post_type,
+					'fields' => 'ids',
 					'post_status' => woo_st_post_statuses(),
 					'numberposts' => -1
 				) );
 				if( $coupons ) {
-					foreach( $coupons as $coupon ) {
-						if( isset( $coupon->ID ) )
-							wp_delete_post( $coupon->ID, true );
-					}
+					foreach( $coupons as $coupon )
+						wp_delete_post( $coupon, true );
 				}
 				break;
 
@@ -328,16 +338,16 @@ if( is_admin() ) {
 
 			case 'credit-cards':
 				$post_type = 'offline_payment';
-				$credit_cards = (array)get_posts( array( 
+				$args = array( 
 					'post_type' => $post_type,
+					'fields' => 'ids',
 					'post_status' => woo_st_post_statuses(),
 					'numberposts' => -1
-				) );
+				);
+				$credit_cards = get_posts( $args );
 				if( $credit_cards ) {
-					foreach( $credit_cards as $credit_card ) {
-						if( isset( $credit_card->ID ) )
-							wp_delete_post( $credit_card->ID, true );
-					}
+					foreach( $credit_cards as $credit_card )
+						wp_delete_post( $credit_card, true );
 				}
 				break;
 
@@ -345,22 +355,25 @@ if( is_admin() ) {
 
 			case 'posts':
 				$post_type = 'post';
-				$posts = (array)get_posts( array( 
+				$args = array( 
 					'post_type' => $post_type,
+					'fields' => 'ids',
 					'post_status' => woo_st_post_statuses(),
 					'numberposts' => -1
-				) );
+				);
+				$posts = get_posts( $args );
 				if( $posts ) {
-					foreach( $posts as $post ) {
-						if( isset( $post->ID ) )
-							wp_delete_post( $post->ID, true );
-					}
+					foreach( $posts as $post )
+						wp_delete_post( $post, true );
 				}
 				break;
 
 			case 'post_categories':
 				$term_taxonomy = 'category';
-				$post_categories = get_terms( $term_taxonomy, array( 'hide_empty' => false ) );
+				$args = array(
+					'hide_empty' => false
+				);
+				$post_categories = get_terms( $term_taxonomy, $args );
 				if( $post_categories ) {
 					foreach( $post_categories as $post_category ) {
 						wp_delete_term( $post_category->term_id, $term_taxonomy );
@@ -373,7 +386,10 @@ if( is_admin() ) {
 
 			case 'post_tags':
 				$term_taxonomy = 'post_tag';
-				$post_tags = get_terms( $term_taxonomy, array( 'hide_empty' => false ) );
+				$args = array(
+					'hide_empty' => false
+				);
+				$post_tags = get_terms( $term_taxonomy, $args );
 				if( $post_tags ) {
 					foreach( $post_tags as $post_tag ) {
 						wp_delete_term( $post_tag->term_id, $term_taxonomy );

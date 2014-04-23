@@ -5,7 +5,7 @@ Donate link: http://www.visser.com.au/#donations
 Tags: woocommerce, mod, delete store, clean store, nuke, store toolkit
 Requires at least: 2.9.2
 Tested up to: 3.9
-Stable tag: 1.3.8
+Stable tag: 1.3.9
 
 == Description ==
 
@@ -71,6 +71,9 @@ If you have any problems, questions or suggestions please join the members discu
 http://www.visser.com.au/woocommerce/forums/
 
 == Changelog ==
+
+= 1.3.9 =
+* Fixed: Reduced memory usage when bulk deleting large catalogues
 
 = 1.3.8 =
 * Added: Order Meta widget on Orders screen
