@@ -3,72 +3,40 @@
 Plugin Name: WooCommerce - Store Toolkit
 Plugin URI: http://www.visser.com.au/woocommerce/plugins/store-toolkit/
 Description: Store Toolkit includes a growing set of commonly-used WooCommerce administration tools aimed at web developers and store maintainers.
-Version: 1.4
+Version: 1.4.1
 Author: Visser Labs
 Author URI: http://www.visser.com.au/about/
 License: GPL2
 */
 
-load_plugin_textdomain( 'woo_st', null, dirname( plugin_basename( __FILE__ ) ) . '/languages' );
+if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
-include_once( 'includes/functions.php' );
+define( 'WOO_ST_DIRNAME', basename( dirname( __FILE__ ) ) );
+define( 'WOO_ST_RELPATH', basename( dirname( __FILE__ ) ) . '/' . basename( __FILE__ ) );
+define( 'WOO_ST_PATH', plugin_dir_path( __FILE__ ) );
+define( 'WOO_ST_PREFIX', 'woo_st' );
 
-include_once( 'includes/common.php' );
+include_once( WOO_ST_PATH . 'commmon/common.php' );
+include_once( WOO_ST_PATH . 'includes/functions.php' );
 
-$woo_st = array(
-	'filename' => basename( __FILE__ ),
-	'dirname' => basename( dirname( __FILE__ ) ),
-	'abspath' => dirname( __FILE__ ),
-	'relpath' => basename( dirname( __FILE__ ) ) . '/' . basename( __FILE__ )
-);
-
-$woo_st['prefix'] = 'woo_st';
-$woo_st['name'] = __( 'Store Toolkit for WooCommerce', 'woo_st' );
-$woo_st['menu'] = __( 'Store Toolkit', 'woo_st' );
 /**
  * For developers: Store Toolkit debugging mode.
  *
  * Change this to true to enable the display of notices during development.
  */
-$woo_st['debug'] = false;
+define( 'WOO_ST_DEBUG', 'woo_st' );
+
+function woo_st_i18n() {
+
+	load_plugin_textdomain( 'woo_st', false, dirname( plugin_basename( __FILE__ ) ) . '/languages' );
+
+}
+add_action( 'init', 'woo_st_i18n' );
 
 if( is_admin() ) {
 
 	/* Start of: WordPress Administration */
 
-	function woo_st_add_settings_link( $links, $file ) {
-
-		static $this_plugin;
-		if( !$this_plugin ) $this_plugin = plugin_basename( __FILE__ );
-		if( $file == $this_plugin ) {
-			// Manage
-			$manage_link = sprintf( '<a href="%s">' . __( 'Manage', 'woo_st' ) . '</a>', add_query_arg( 'page', 'woo_st', 'admin.php' ) );
-			array_unshift( $links, $manage_link );
-		}
-		return $links;
-
-	}
-	add_filter( 'plugin_action_links', 'woo_st_add_settings_link', 10, 2 );
-
-	function woo_st_enqueue_scripts( $hook ) {
-
-		// Settings
-		$page = 'woocommerce_page_woo_st';
-		if( $page == $hook ) {
-			wp_enqueue_style( 'woo_st_styles', plugins_url( '/templates/admin/woo-admin_st-toolkit.css', __FILE__ ) );
-			wp_enqueue_script( 'woo_st_scripts', plugins_url( '/templates/admin/woo-admin_st-toolkit.js', __FILE__ ), array( 'jquery' ) );
-		}
-		// Simple check that WooCommerce is activated
-		if( class_exists( 'WooCommerce' ) ) {
-
-			global $woocommerce;
-
-			wp_enqueue_style( 'woocommerce_admin_styles', $woocommerce->plugin_url() . '/assets/css/admin.css' );
-
-		}
-
-	}
-	add_action( 'admin_enqueue_scripts', 'woo_st_enqueue_scripts' );
 
 	function woo_st_admin_init() {
 
@@ -130,13 +98,13 @@ if( is_admin() ) {
 
 	function woo_st_default_html_page() {
 
-		global $woo_st, $wpdb;
+		global $wpdb;
 
 		$tab = false;
 		if( isset( $_GET['tab'] ) )
 			$tab = $_GET['tab'];
 
-		include_once( 'templates/admin/woo-admin_st-toolkit.php' );
+		include_once( 'templates/admin/tabs.php' );
 
 	}
 
@@ -170,8 +138,8 @@ if( is_admin() ) {
 
 		if( $post->post_status <> 'auto-draft' ) {
 			$post_type = 'shop_order';
-			add_meta_box( 'woo-order-post_data', __( 'Order Post Meta', 'woo_oc' ), 'woo_st_order_data_meta_box', $post_type, 'normal', 'default' );
-			add_meta_box( 'woo-order-post_item', __( 'Order Items Post Meta', 'woo_oc' ), 'woo_st_order_items_data_meta_box', $post_type, 'normal', 'default' );
+			add_meta_box( 'woo-order-post_data', __( 'Order Post Meta', 'woo_st' ), 'woo_st_order_data_meta_box', $post_type, 'normal', 'default' );
+			add_meta_box( 'woo-order-post_item', __( 'Order Items Post Meta', 'woo_st' ), 'woo_st_order_items_data_meta_box', $post_type, 'normal', 'default' );
 		}
 
 	}
@@ -179,17 +147,17 @@ if( is_admin() ) {
 
 	function woo_st_order_data_meta_box() {
 
-		global $woo_st, $post;
+		global $post;
 
 		$post_meta = get_post_custom( $post->ID );
 
-		require( $woo_st['abspath'] . '/templates/admin/woo-admin_st-orders_data.php' );
+		include_once( WOO_ST_PATH . 'templates/admin/woo-admin_st-orders_data.php' );
 
 	}
 
 	function woo_st_order_items_data_meta_box() {
 
-		global $woo_st, $post, $wpdb;
+		global $post, $wpdb;
 
 		$order_items_sql = $wpdb->prepare( "SELECT `order_item_id` as id, `order_item_name` as name, `order_item_type` as type FROM `" . $wpdb->prefix . "woocommerce_order_items` WHERE `order_id` = %d", $post->ID );
 		if( $order_items = $wpdb->get_results( $order_items_sql ) ) {
@@ -199,7 +167,7 @@ if( is_admin() ) {
 			}
 		}
 
-		require( $woo_st['abspath'] . '/templates/admin/woo-admin_st-order_items_data.php' );
+		include_once( WOO_ST_PATH . 'templates/admin/woo-admin_st-order_items_data.php' );
 
 	}
 
@@ -207,7 +175,7 @@ if( is_admin() ) {
 
 		if( $post->post_status <> 'auto-draft' ) {
 			$post_type = 'product';
-			add_meta_box( 'woo-product-post_data', __( 'Product Post Meta', 'woo_oc' ), 'woo_st_product_data_meta_box', $post_type, 'normal', 'default' );
+			add_meta_box( 'woo-product-post_data', __( 'Product Post Meta', 'woo_st' ), 'woo_st_product_data_meta_box', $post_type, 'normal', 'default' );
 		}
 
 	}
@@ -215,11 +183,11 @@ if( is_admin() ) {
 
 	function woo_st_product_data_meta_box() {
 
-		global $woo_st, $post;
+		global $post;
 
 		$post_meta = get_post_custom( $post->ID );
 
-		require( $woo_st['abspath'] . '/templates/admin/woo-admin_st-products_data.php' );
+		include_once( WOO_ST_PATH . 'templates/admin/woo-admin_st-products_data.php' );
 
 	}
 

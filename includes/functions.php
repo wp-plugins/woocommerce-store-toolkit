@@ -3,6 +3,8 @@ if( is_admin() ) {
 
 	/* Start of: WordPress Administration */
 
+	include_once( WOO_ST_PATH . 'includes/admin.php' );
+
 	// WordPress Administration menu
 	function woo_st_admin_menu() {
 
@@ -13,12 +15,10 @@ if( is_admin() ) {
 
 	function woo_st_template_header( $title = '', $icon = 'woocommerce' ) {
 
-		global $woo_st;
-
 		if( $title )
 			$output = $title;
 		else
-			$output = $woo_st['menu']; ?>
+			$output = __( 'Store Toolkit', 'woo_st' ); ?>
 <div class="wrap">
 	<div id="icon-<?php echo $icon; ?>" class="icon32 icon32-woocommerce-settings"><br /></div>
 	<h2><?php echo $output; ?></h2>
@@ -32,17 +32,15 @@ if( is_admin() ) {
 
 	function woo_st_support_donate() {
 
-		global $woo_st;
-
 		$output = '';
 		$show = true;
 		if( function_exists( 'woo_vl_we_love_your_plugins' ) ) {
-			if( in_array( $woo_st['dirname'], woo_vl_we_love_your_plugins() ) )
+			if( in_array( WOO_ST_DIRNAME, woo_vl_we_love_your_plugins() ) )
 				$show = false;
 		}
 		if( $show ) {
 			$donate_url = 'http://www.visser.com.au/#donations';
-			$rate_url = 'http://wordpress.org/support/view/plugin-reviews/' . $woo_st['dirname'];
+			$rate_url = 'http://wordpress.org/support/view/plugin-reviews/' . WOO_ST_DIRNAME;
 			$output = '
 	<div id="support-donate_rate" class="support-donate_rate">
 		<p>' . sprintf( __( '<strong>Like this Plugin?</strong> %s and %s.', 'woo_st' ), '<a href="' . $donate_url . '" target="_blank">' . __( 'Donate to support this Plugin', 'woo_st' ) . '</a>', '<a href="' . add_query_arg( array( 'rate' => '5' ), $rate_url ) . '#postform" target="_blank">rate / review us on WordPress.org</a>' ) . '</p>
@@ -53,12 +51,13 @@ if( is_admin() ) {
 
 	}
 
-	function woo_st_return_count( $dataset ) {
+	// Returns number of an Export type prior to nuke, used on Store Toolkit screen
+	function woo_st_return_count( $export_type = '' ) {
 
 		global $wpdb;
 
 		$count_sql = null;
-		switch( $dataset ) {
+		switch( $export_type ) {
 
 			// WooCommerce
 
@@ -151,11 +150,11 @@ if( is_admin() ) {
 
 	}
 
-	function woo_st_clear_dataset( $dataset, $data = null ) {
+	function woo_st_clear_dataset( $export_type = '', $data = null ) {
 
 		global $wpdb;
 
-		switch( $dataset ) {
+		switch( $export_type ) {
 
 			// WooCommerce
 
@@ -275,20 +274,24 @@ if( is_admin() ) {
 			case 'orders':
 				$post_type = 'shop_order';
 				$term_taxonomy = 'shop_order_status';
+				$woocommerce_version = woo_get_woo_version();
 				if( $data ) {
 					foreach( $data as $single_order ) {
 						$args = array(
 							'post_type' => $post_type,
 							'fields' => 'ids',
-							'tax_query' => array(
+							'numberposts' => -1
+						);
+						// Check if this is a pre-WooCommerce 2.2 instance
+						if( version_compare( $woocommerce_version, '2.2', '<' ) ) {
+							$args['tax_query'] = array(
 								array(
 									'taxonomy' => $term_taxonomy,
 									'field' => 'id',
 									'terms' => $single_order
 								)
-							),
-							'numberposts' => -1
-						);
+							);
+						}
 						$orders = get_posts( $args );
 						if( $orders ) {
 							foreach( $orders as $order )
@@ -459,6 +462,7 @@ if( is_admin() ) {
 
 	}
 
+	// Returns a list of allowed Export type statuses
 	function woo_st_post_statuses() {
 
 		$output = array(
@@ -472,74 +476,6 @@ if( is_admin() ) {
 			'trash'
 		);
 		return $output;
-
-	}
-
-	function woo_st_admin_active_tab( $tab_name = null, $tab = null ) {
-
-		if( isset( $_GET['tab'] ) && !$tab )
-			$tab = $_GET['tab'];
-		else
-			$tab = 'overview';
-
-		$output = '';
-		if( isset( $tab_name ) && $tab_name ) {
-			if( $tab_name == $tab )
-				$output = ' nav-tab-active';
-		}
-		echo $output;
-
-	}
-
-	function woo_st_tab_template( $tab = '' ) {
-
-		global $woo_st;
-
-		if( !$tab )
-			$tab = 'overview';
-
-		switch( $tab ) {
-
-			case 'nuke':
-				$products = woo_st_return_count( 'products' );
-				$images = woo_st_return_count( 'product_images' );
-				$tags = woo_st_return_count( 'tags' );
-				$categories = woo_st_return_count( 'categories' );
-				if( $categories ) {
-					$term_taxonomy = 'product_cat';
-					$args = array(
-						'hide_empty' => 0
-					);
-					$categories_data = get_terms( $term_taxonomy, $args );
-				}
-				$orders = woo_st_return_count( 'orders' );
-				if( $orders ) {
-					$term_taxonomy = 'shop_order_status';
-					$args = array(
-						'hide_empty' => 0
-					);
-					$orders_data = get_terms( $term_taxonomy, $args );
-				}
-				$coupons = woo_st_return_count( 'coupons' );
-
-				$credit_cards = woo_st_return_count( 'credit-cards' );
-				$attributes = woo_st_return_count( 'attributes' );
-
-				$posts = woo_st_return_count( 'posts' );
-				$post_categories = woo_st_return_count( 'post_categories' );
-				$post_tags = woo_st_return_count( 'post_tags' );
-				$links = woo_st_return_count( 'links' );
-				$comments = woo_st_return_count( 'comments' );
-				$media_images = woo_st_return_count( 'media_images' );
-
-				$show_table = false;
-				if( $products || $images || $tags || $categories || $orders || $credit_cards || $attributes )
-					$show_table = true;
-				break;
-
-		}
-		if( $tab )
-			include_once( $woo_st['abspath'] . '/templates/admin/woo-admin_st-toolkit_' . $tab . '.php' );
 
 	}
 

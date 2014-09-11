@@ -65,7 +65,7 @@
 
 						<tr>
 							<th>
-								<label for="sales_orders"><?php _e( 'Sales', 'woo_st' ); ?></label>
+								<label for="sales_orders"><?php _e( 'Orders', 'woo_st' ); ?></label>
 							</th>
 							<td>
 								<input type="checkbox" id="sales_orders" name="woo_st_sales_orders"<?php echo disabled( $orders, 0 ); ?> /> (<?php echo $orders; ?>)
@@ -133,6 +133,7 @@
 <?php if( $orders ) { ?>
 				<p class="description"><?php _e( 'Remove Orders based on the Order Status by selecting the the Order Status below, then click Remove to permanently remove those Orders.', 'woo_st' ); ?></p>
 				<ul>
+<?php if( $orders_data ) { ?>
 	<?php foreach( $orders_data as $order_single ) { ?>
 					<li>
 						<label>
@@ -141,6 +142,9 @@
 						</label>
 					</li>
 	<?php } ?>
+<?php } else { ?>
+				<li><?php _e( 'No Order Status\'s were found.', 'woo_ce' ); ?></li>
+<?php } ?>
 				</ul>
 				<p class="submit">
 					<input type="submit" value="<?php _e( 'Remove', 'woo_st' ); ?>" class="button-primary" />
