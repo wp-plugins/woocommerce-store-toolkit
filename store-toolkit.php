@@ -16,7 +16,7 @@ define( 'WOO_ST_RELPATH', basename( dirname( __FILE__ ) ) . '/' . basename( __FI
 define( 'WOO_ST_PATH', plugin_dir_path( __FILE__ ) );
 define( 'WOO_ST_PREFIX', 'woo_st' );
 
-include_once( WOO_ST_PATH . 'commmon/common.php' );
+include_once( WOO_ST_PATH . 'common/common.php' );
 include_once( WOO_ST_PATH . 'includes/functions.php' );
 
 /**
