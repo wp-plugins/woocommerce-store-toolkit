@@ -62,8 +62,13 @@ if( is_admin() ) {
 			// WooCommerce
 
 			case 'products':
-				$post_type = 'product';
-				$count = wp_count_posts( $post_type );
+				$post_type = array( 'product', 'product_variation' );
+				$args = array(
+					'post_type' => $post_type,
+					'posts_per_page' => 1
+				);
+				$query = new WP_Query( $args );
+				$count = $query->found_posts;
 				break;
 
 			case 'product_images':
@@ -159,7 +164,7 @@ if( is_admin() ) {
 			// WooCommerce
 
 			case 'products':
-				$post_type = 'product';
+				$post_type = array( 'product', 'product_variation' );
 				$args = array(
 					'post_type' => $post_type,
 					'fields' => 'ids',
@@ -170,12 +175,22 @@ if( is_admin() ) {
 				if( $products ) {
 					foreach( $products as $product ) {
 						wp_delete_post( $product, true );
-						wp_set_object_terms( $product, null, 'product_tag' );
+						// Product Category
+						if( taxonomy_exists( 'product_cat' ) )
+							wp_set_object_terms( $product, null, 'product_cat' );
+						// Product Tag
+						if( taxonomy_exists( 'product_tag' ) )
+							wp_set_object_terms( $product, null, 'product_tag' );
+						// Product Brand
+						if( taxonomy_exists( 'product_brand' ) )
+							wp_set_object_terms( $product, null, 'product_brand' );
 						$attributes_sql = "SELECT `attribute_id` as ID, `attribute_name` as name, `attribute_label` as label, `attribute_type` as type FROM `" . $wpdb->prefix . "woocommerce_attribute_taxonomies`";
 						$attributes = $wpdb->get_results( $attributes_sql );
 						if( $attributes ) {
-							foreach( $attributes as $attribute )
-								wp_set_object_terms( $product, null, 'pa_' . $attribute->name );
+							foreach( $attributes as $attribute ) {
+								if( taxonomy_exists( 'pa_' . $attribute->name ) )
+									wp_set_object_terms( $product, null, 'pa_' . $attribute->name );
+							}
 						}
 					}
 					unset( $products, $product );
@@ -304,7 +319,7 @@ if( is_admin() ) {
 					$args = array(
 						'post_type' => $post_type,
 						'fields' => 'ids',
-						'post_status' => woo_st_post_statuses(),
+						'post_status' => 'any',
 						'numberposts' => -1
 					);
 					$orders = get_posts( $args );
@@ -332,12 +347,12 @@ if( is_admin() ) {
 				break;
 
 			case 'attributes':
-				if( !isset( $_POST['woo_st_attributes'] ) ) {
+				if( isset( $_POST['woo_st_attributes'] ) ) {
 					$attributes_sql = "SELECT `attribute_id` as ID, `attribute_name` as name, `attribute_label` as label, `attribute_type` as type FROM `" . $wpdb->prefix . "woocommerce_attribute_taxonomies`";
 					$attributes = $wpdb->get_results( $attributes_sql );
 					if( $attributes ) {
 						foreach( $attributes as $attribute ) {
-							$terms_sql = $wpdb->prepare( "SELECT `term_id` FROM `" . $wpdb->prefix . "term_taxonomy` WHERE `taxonomy` = 'pa_%s'", $attribute->name );
+							$terms_sql = $wpdb->prepare( "SELECT `term_id` FROM `" . $wpdb->prefix . "term_taxonomy` WHERE `taxonomy` = %s", 'pa_' . $attribute->name );
 							$terms = $wpdb->get_results( $terms_sql );
 							if( $terms ) {
 								foreach( $terms as $term )

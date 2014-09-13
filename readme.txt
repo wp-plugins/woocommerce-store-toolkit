@@ -5,7 +5,7 @@ Donate link: http://www.visser.com.au/#donations
 Tags: woocommerce, mod, delete store, clean store, nuke, store toolkit
 Requires at least: 2.9.2
 Tested up to: 4.0
-Stable tag: 1.4.1
+Stable tag: 1.4.2
 
 == Description ==
 
@@ -72,6 +72,11 @@ If you have any problems, questions or suggestions please join the members discu
 http://www.visser.com.au/woocommerce/forums/
 
 == Changelog ==
+
+= 1.4.2 =
+* Fixed: Delete both product and product_variation Post Types
+* Fixed: Delete Orders in WooCommerce 2.2+
+* Fixed: Remove Terms linked to Products
 
 = 1.4.1 =
 * Fixed: WooCommerce 2.2+ compatibility
