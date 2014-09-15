@@ -5,7 +5,7 @@ Donate link: http://www.visser.com.au/#donations
 Tags: woocommerce, mod, delete store, clean store, nuke, store toolkit
 Requires at least: 2.9.2
 Tested up to: 4.0
-Stable tag: 1.4.3
+Stable tag: 1.4.4
 
 == Description ==
 
@@ -78,6 +78,9 @@ If you have any problems, questions or suggestions please join the members discu
 http://www.visser.com.au/woocommerce/forums/
 
 == Changelog ==
+
+= 1.4.4 =
+* Changed: Renamed mislabeled Category Term meta
 
 = 1.4.3 =
 * Changed: Renamed meta box template files
