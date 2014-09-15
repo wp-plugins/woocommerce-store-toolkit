@@ -81,6 +81,7 @@ http://www.visser.com.au/woocommerce/forums/
 
 = 1.4.4 =
 * Changed: Renamed mislabeled Category Term meta
+* Fixed: PHP warning on image nuke
 
 = 1.4.3 =
 * Changed: Renamed meta box template files

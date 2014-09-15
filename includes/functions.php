@@ -287,7 +287,7 @@ if( is_admin() ) {
 					}
 				} else {
 					// Check for WooCommerce-related images
-					$images_sql = $wpdb->prepare( "SELECT `post_id` AS `ID` FROM `" . $wpdb->postmeta . "` WHERE `meta_key` = '_woocommerce_exclude_image' AND `meta_value` = 0" );
+					$images_sql = "SELECT `post_id` AS `ID` FROM `" . $wpdb->postmeta . "` WHERE `meta_key` = '_woocommerce_exclude_image' AND `meta_value` = 0";
 					$images = $wpdb->get_col( $images_sql );
 					if( !empty( $images ) ) {
 						foreach( $images as $image )
