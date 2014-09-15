@@ -88,8 +88,11 @@ if( is_admin() ) {
 					woo_st_clear_dataset( 'comments' );
 				if( isset( $_POST['woo_st_media_images'] ) )
 					woo_st_clear_dataset( 'media_images' );
-
 				break;
+
+			default:
+				$term_taxonomy = 'product_cat';
+				add_action( $term_taxonomy . '_edit_form_fields', 'woo_st_category_data_meta_box', 11 );
 
 		}
 
@@ -104,7 +107,7 @@ if( is_admin() ) {
 		if( isset( $_GET['tab'] ) )
 			$tab = $_GET['tab'];
 
-		include_once( 'templates/admin/tabs.php' );
+		include_once( WOO_ST_PATH . 'templates/admin/tabs.php' );
 
 	}
 
@@ -118,7 +121,7 @@ if( is_admin() ) {
 		switch( $action ) {
 
 			case 'nuke':
-				$message = __( 'Chosen WooCommerce details have been permanently erased from your store.', 'woo_st' );
+				$message = __( 'Chosen WooCommerce and/or WordPress details have been permanently erased from your store.', 'woo_st' );
 				$output = '<div class="updated settings-error"><p>' . $message . '</p></div>';
 				echo $output;
 
@@ -134,16 +137,32 @@ if( is_admin() ) {
 
 	}
 
-	function add_order_data_meta_box( $post_type, $post = '' ) {
+	function add_data_meta_boxes( $post_type, $post = '' ) {
 
 		if( $post->post_status <> 'auto-draft' ) {
+			$post_type = 'product';
+			add_meta_box( 'woo-product-post_data', __( 'Product Post Meta', 'woo_st' ), 'woo_st_product_data_meta_box', $post_type, 'normal', 'default' );
+
 			$post_type = 'shop_order';
 			add_meta_box( 'woo-order-post_data', __( 'Order Post Meta', 'woo_st' ), 'woo_st_order_data_meta_box', $post_type, 'normal', 'default' );
 			add_meta_box( 'woo-order-post_item', __( 'Order Items Post Meta', 'woo_st' ), 'woo_st_order_items_data_meta_box', $post_type, 'normal', 'default' );
+
+			$post_type = 'shop_coupon';
+			add_meta_box( 'woo-coupon-post_data', __( 'Coupon Post Meta', 'woo_st' ), 'woo_st_coupon_data_meta_box', $post_type, 'normal', 'default' );
 		}
 
 	}
-	add_action( 'add_meta_boxes', 'add_order_data_meta_box', 10, 2 );
+	add_action( 'add_meta_boxes', 'add_data_meta_boxes', 10, 2 );
+
+	function woo_st_product_data_meta_box() {
+
+		global $post;
+
+		$post_meta = get_post_custom( $post->ID );
+
+		include_once( WOO_ST_PATH . 'templates/admin/product_data.php' );
+
+	}
 
 	function woo_st_order_data_meta_box() {
 
@@ -151,7 +170,7 @@ if( is_admin() ) {
 
 		$post_meta = get_post_custom( $post->ID );
 
-		include_once( WOO_ST_PATH . 'templates/admin/woo-admin_st-orders_data.php' );
+		include_once( WOO_ST_PATH . 'templates/admin/order_data.php' );
 
 	}
 
@@ -167,27 +186,26 @@ if( is_admin() ) {
 			}
 		}
 
-		include_once( WOO_ST_PATH . 'templates/admin/woo-admin_st-order_items_data.php' );
+		include_once( WOO_ST_PATH . 'templates/admin/order_item_data.php' );
 
 	}
 
-	function add_product_data_meta_box( $post_type, $post = '' ) {
-
-		if( $post->post_status <> 'auto-draft' ) {
-			$post_type = 'product';
-			add_meta_box( 'woo-product-post_data', __( 'Product Post Meta', 'woo_st' ), 'woo_st_product_data_meta_box', $post_type, 'normal', 'default' );
-		}
-
-	}
-	add_action( 'add_meta_boxes', 'add_product_data_meta_box', 10, 2 );
-
-	function woo_st_product_data_meta_box() {
+	function woo_st_coupon_data_meta_box() {
 
 		global $post;
 
 		$post_meta = get_post_custom( $post->ID );
 
-		include_once( WOO_ST_PATH . 'templates/admin/woo-admin_st-products_data.php' );
+		include_once( WOO_ST_PATH . 'templates/admin/coupon_data.php' );
+
+	}
+
+	function woo_st_category_data_meta_box( $term = '', $taxonomy = '' ) {
+
+		$term_taxonomy = 'woocommerce_term';
+		$term_meta = get_metadata( $term_taxonomy, $term->term_id );
+
+		include_once( WOO_ST_PATH . 'templates/admin/category_data.php' );
 
 	}
 

@@ -5,7 +5,7 @@ Donate link: http://www.visser.com.au/#donations
 Tags: woocommerce, mod, delete store, clean store, nuke, store toolkit
 Requires at least: 2.9.2
 Tested up to: 4.0
-Stable tag: 1.4.2
+Stable tag: 1.4.3
 
 == Description ==
 
@@ -16,11 +16,15 @@ Store Toolkit includes a growing set of commonly-used WooCommerce administration
 1. Nuke support for clearing WooCommerce store records
 
 * Products
-* Product Images
-* Produt Tags
+* Variations
 * Product Categories
+* Produt Tags
+* Product Images
+* Product Attributes
 * Orders
 * Coupons
+* Empty Products by Product Category
+* Delete Orders by Order Status
 
 2. Nuke support for clearing WordPress records
 
@@ -34,8 +38,10 @@ Store Toolkit includes a growing set of commonly-used WooCommerce administration
 3. WooCommerce maintainence/debugging tools
 
 * All in One SEO Pack integration
-* Order Meta widget on Orders screen
-* Product Meta widget on Products screen
+* Order Post Meta meta box on Orders screen
+* Product Post Meta meta box on Products screen
+* Coupon Post Meta meta box on Coupons screen
+* Product Category Term Meta meta box on Edit Category screen
 
 If you find yourself in the situation where you need to start over with a fresh installation of WooCommerce then a 'nuke' will do the job.
 
@@ -72,6 +78,12 @@ If you have any problems, questions or suggestions please join the members discu
 http://www.visser.com.au/woocommerce/forums/
 
 == Changelog ==
+
+= 1.4.3 =
+* Changed: Renamed meta box template files
+* Fixed: Nuke Product Images when no Products exist
+* Added: Coupon Post meta to Add/Edit Coupon screen
+* Added: Category Term meta to Edit Category screen
 
 = 1.4.2 =
 * Fixed: Delete both product and product_variation Post Types

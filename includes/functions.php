@@ -258,15 +258,16 @@ if( is_admin() ) {
 				break;
 
 			case 'product_images':
-				$post_type = 'product';
+				$post_type = array( 'product', 'product_variation' );
 				$args = array(
 					'post_type' => $post_type,
 					'fields' => 'ids',
-					'post_status' => woo_st_post_statuses(),
+					'post_status' => 'any',
 					'numberposts' => -1
 				);
 				$products = get_posts( $args );
-				if( $products ) {
+				// Check each Product for images
+				if( !empty( $products ) ) {
 					$upload_dir = wp_upload_dir();
 					foreach( $products as $product ) {
 						$args = array(
@@ -278,10 +279,20 @@ if( is_admin() ) {
 						);
 						$images = get_children( $args );
 						if( !empty( $images ) ) {
-							foreach( $images as $image )
+							foreach( $images as $image ) {
 								wp_delete_attachment( $image->ID, true );
+							}
 							unset( $images, $image );
 						}
+					}
+				} else {
+					// Check for WooCommerce-related images
+					$images_sql = $wpdb->prepare( "SELECT `post_id` AS `ID` FROM `" . $wpdb->postmeta . "` WHERE `meta_key` = '_woocommerce_exclude_image' AND `meta_value` = 0" );
+					$images = $wpdb->get_col( $images_sql );
+					if( !empty( $images ) ) {
+						foreach( $images as $image )
+							wp_delete_attachment( $image, true );
+						unset( $images, $image );
 					}
 				}
 				break;

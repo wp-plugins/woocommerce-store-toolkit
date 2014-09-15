@@ -9,6 +9,12 @@
 	padding-left:7px;
 }
 
+/* Edit Category */
+
+body.taxonomy-product_cat table.category_data th {
+	padding:8px 10px;
+}
+
 /* Support - Donate / Rate */
 
 .woocommerce_page_woo_st .support-donate_rate {
