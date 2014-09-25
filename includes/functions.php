@@ -39,7 +39,7 @@ if( is_admin() ) {
 				$show = false;
 		}
 		if( $show ) {
-			$donate_url = 'http://www.visser.com.au/#donations';
+			$donate_url = 'http://www.visser.com.au/donate/';
 			$rate_url = 'http://wordpress.org/support/view/plugin-reviews/' . WOO_ST_DIRNAME;
 			$output = '
 	<div id="support-donate_rate" class="support-donate_rate">

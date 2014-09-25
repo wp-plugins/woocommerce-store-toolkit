@@ -1,5 +1,5 @@
 <tr class="form-field">
-	<th scope="row" valign="top"><label><?php _e( 'Category Term meta', 'woocommerce' ); ?></label></th>
+	<th scope="row" valign="top"><label><?php _e( 'Category Term meta', 'woo_st' ); ?></label></th>
 	<td>
 
 		<table class="widefat page fixed category_data">

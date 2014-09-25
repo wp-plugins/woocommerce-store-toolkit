@@ -87,7 +87,7 @@ function woo_st_enqueue_scripts( $hook ) {
 	}
 
 	// Settings
-	$pages = array( 'woocommerce_page_woo_st', 'edit-tags.php' );
+	$pages = array( 'woocommerce_page_woo_st', 'edit-tags.php', 'user-edit.php', 'profile.php' );
 	if( in_array( $hook, $pages ) ) {
 		wp_enqueue_style( 'woo_st_styles', plugins_url( '/templates/admin/toolkit.css', WOO_ST_RELPATH ) );
 		wp_enqueue_script( 'woo_st_scripts', plugins_url( '/templates/admin/toolkit.js', WOO_ST_RELPATH ), array( 'jquery' ) );

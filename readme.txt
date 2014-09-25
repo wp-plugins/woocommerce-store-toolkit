@@ -5,7 +5,7 @@ Donate link: http://www.visser.com.au/#donations
 Tags: woocommerce, mod, delete store, clean store, nuke, store toolkit
 Requires at least: 2.9.2
 Tested up to: 4.0
-Stable tag: 1.4.4
+Stable tag: 1.4.5
 
 == Description ==
 
@@ -42,6 +42,7 @@ Store Toolkit includes a growing set of commonly-used WooCommerce administration
 * Product Post Meta meta box on Products screen
 * Coupon Post Meta meta box on Coupons screen
 * Product Category Term Meta meta box on Edit Category screen
+* User Meta meta box on Edit User screen
 
 If you find yourself in the situation where you need to start over with a fresh installation of WooCommerce then a 'nuke' will do the job.
 
@@ -78,6 +79,9 @@ If you have any problems, questions or suggestions please join the members discu
 http://www.visser.com.au/woocommerce/forums/
 
 == Changelog ==
+
+= 1.4.5 =
+* Added: Custom User meta box to Edit User
 
 = 1.4.4 =
 * Changed: Renamed mislabeled Category Term meta
