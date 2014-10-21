@@ -5,7 +5,7 @@ Donate link: http://www.visser.com.au/#donations
 Tags: woocommerce, mod, delete store, clean store, nuke, store toolkit
 Requires at least: 2.9.2
 Tested up to: 4.0
-Stable tag: 1.4.5
+Stable tag: 1.4.6
 
 == Description ==
 
@@ -79,6 +79,9 @@ If you have any problems, questions or suggestions please join the members discu
 http://www.visser.com.au/woocommerce/forums/
 
 == Changelog ==
+
+= 1.4.6 =
+* Added: User capability check 'manage_options' for Meta boxes
 
 = 1.4.5 =
 * Added: Custom User meta box to Edit User
