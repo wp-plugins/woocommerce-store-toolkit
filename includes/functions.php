@@ -85,9 +85,27 @@ if( is_admin() ) {
 				$count = wp_count_terms( $term_taxonomy );
 				break;
 
+			case 'brands':
+				$term_taxonomy = 'product_brand';
+				$count = wp_count_terms( $term_taxonomy );
+				break;
+
+			case 'vendors':
+				$term_taxonomy = 'shop_vendor';
+				$count = wp_count_terms( $term_taxonomy );
+				break;
+
 			case 'orders':
 				$post_type = 'shop_order';
 				$count = wp_count_posts( $post_type );
+				break;
+
+			case 'tax_rates':
+				$count_sql = "SELECT COUNT(`tax_rate_id`) FROM `" . $wpdb->prefix . "woocommerce_tax_rates`";
+				break;
+
+			case 'download_permissions':
+				$count_sql = "SELECT COUNT(`download_id`) FROM `" . $wpdb->prefix . "woocommerce_downloadable_product_permissions`";
 				break;
 
 			case 'coupons':
@@ -184,6 +202,10 @@ if( is_admin() ) {
 						// Product Brand
 						if( taxonomy_exists( 'product_brand' ) )
 							wp_set_object_terms( $product, null, 'product_brand' );
+						// Product Vendor
+						if( taxonomy_exists( 'shop_vendor' ) )
+							wp_set_object_terms( $product, null, 'shop_vendor' );
+						// Attributes
 						$attributes_sql = "SELECT `attribute_id` as ID, `attribute_name` as name, `attribute_label` as label, `attribute_type` as type FROM `" . $wpdb->prefix . "woocommerce_attribute_taxonomies`";
 						$attributes = $wpdb->get_results( $attributes_sql );
 						if( $attributes ) {
@@ -257,6 +279,36 @@ if( is_admin() ) {
 				}
 				break;
 
+			case 'brands':
+				$term_taxonomy = 'product_brand';
+				$args = array(
+					'fields' => 'ids',
+					'hide_empty' => false
+				);
+				$tags = get_terms( $term_taxonomy, $args );
+				if( $tags ) {
+					foreach( $tags as $tag ) {
+						wp_delete_term( $tag, $term_taxonomy );
+						$wpdb->query( $wpdb->prepare( "DELETE FROM `" . $wpdb->terms . "` WHERE `term_id` = %d", $tag ) );
+					}
+				}
+				break;
+
+			case 'vendors':
+				$term_taxonomy = 'shop_vendor';
+				$args = array(
+					'fields' => 'ids',
+					'hide_empty' => false
+				);
+				$tags = get_terms( $term_taxonomy, $args );
+				if( $tags ) {
+					foreach( $tags as $tag ) {
+						wp_delete_term( $tag, $term_taxonomy );
+						$wpdb->query( $wpdb->prepare( "DELETE FROM `" . $wpdb->terms . "` WHERE `term_id` = %d", $tag ) );
+					}
+				}
+				break;
+
 			case 'product_images':
 				$post_type = array( 'product', 'product_variation' );
 				$args = array(
@@ -317,9 +369,11 @@ if( is_admin() ) {
 									'terms' => $single_order
 								)
 							);
+						} else {
+							$args['status'] = 'any';
 						}
 						$orders = get_posts( $args );
-						if( $orders ) {
+						if( !empty( $orders ) ) {
 							foreach( $orders as $order )
 								wp_delete_post( $order, true );
 							unset( $orders, $order );
@@ -335,11 +389,23 @@ if( is_admin() ) {
 					);
 					$orders = get_posts( $args );
 					if( $orders ) {
-						foreach( $orders as $order )
+						foreach( $orders as $order ) {
 							wp_delete_post( $order, true );
+						}
 						unset( $orders, $order );
+						$wpdb->query( "TRUNCATE TABLE `" . $wpdb->prefix . "woocommerce_order_items`" );
+						$wpdb->query( "TRUNCATE TABLE `" . $wpdb->prefix . "woocommerce_order_itemmeta`" );
 					}
 				}
+				break;
+
+			case 'tax_rates':
+				$wpdb->query( "TRUNCATE TABLE `" . $wpdb->prefix . "woocommerce_tax_rates`" );
+				$wpdb->query( "TRUNCATE TABLE `" . $wpdb->prefix . "woocommerce_tax_rate_locations`" );
+				break;
+
+			case 'download_permissions':
+				$wpdb->query( "TRUNCATE TABLE `" . $wpdb->prefix . "woocommerce_downloadable_product_permissions`" );
 				break;
 
 			case 'coupons':

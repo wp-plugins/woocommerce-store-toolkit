@@ -3,7 +3,7 @@
 Plugin Name: WooCommerce - Store Toolkit
 Plugin URI: http://www.visser.com.au/woocommerce/plugins/store-toolkit/
 Description: Store Toolkit includes a growing set of commonly-used WooCommerce administration tools aimed at web developers and store maintainers.
-Version: 1.4.6
+Version: 1.4.7
 Author: Visser Labs
 Author URI: http://www.visser.com.au/about/
 License: GPL2
@@ -24,7 +24,7 @@ include_once( WOO_ST_PATH . 'includes/functions.php' );
  *
  * Change this to true to enable the display of notices during development.
  */
-define( 'WOO_ST_DEBUG', 'woo_st' );
+define( 'WOO_ST_DEBUG', false );
 
 function woo_st_i18n() {
 
@@ -36,7 +36,6 @@ add_action( 'init', 'woo_st_i18n' );
 if( is_admin() ) {
 
 	/* Start of: WordPress Administration */
-
 
 	function woo_st_admin_init() {
 
@@ -58,6 +57,10 @@ if( is_admin() ) {
 				}
 				if( isset( $_POST['woo_st_product_tags'] ) )
 					woo_st_clear_dataset( 'tags' );
+				if( isset( $_POST['woo_st_product_brands'] ) )
+					woo_st_clear_dataset( 'brands' );
+				if( isset( $_POST['woo_st_product_vendors'] ) )
+					woo_st_clear_dataset( 'vendors' );
 				if( isset( $_POST['woo_st_product_images'] ) )
 					woo_st_clear_dataset( 'product_images' );
 				if( isset( $_POST['woo_st_coupons'] ) )
@@ -70,6 +73,10 @@ if( is_admin() ) {
 				} else if( isset( $_POST['woo_st_sales_orders'] ) ) {
 					woo_st_clear_dataset( 'orders' );
 				}
+				if( isset( $_POST['woo_st_tax_rates'] ) )
+					woo_st_clear_dataset( 'tax_rates' );
+				if( isset( $_POST['woo_st_download_permissions'] ) )
+					woo_st_clear_dataset( 'download_permissions' );
 
 				// 3rd Party
 				if( isset( $_POST['woo_st_creditcards'] ) )
@@ -92,8 +99,15 @@ if( is_admin() ) {
 
 			default:
 				if( current_user_can( 'manage_options' ) ) {
+					// Category
 					$term_taxonomy = 'product_cat';
 					add_action( $term_taxonomy . '_edit_form_fields', 'woo_st_category_data_meta_box', 11 );
+					// Tag
+					$term_taxonomy = 'product_tag';
+					add_action( $term_taxonomy . '_edit_form_fields', 'woo_st_tag_data_meta_box', 11 );
+					// Brand
+					$term_taxonomy = 'product_brand';
+					add_action( $term_taxonomy . '_edit_form_fields', 'woo_st_brand_data_meta_box', 11 );
 					add_action( 'show_user_profile', 'woo_st_user_data_meta_box', 11 );
 					add_action( 'edit_user_profile', 'woo_st_user_data_meta_box', 11 );
 					add_action( 'add_meta_boxes', 'add_data_meta_boxes', 10, 2 );
@@ -211,6 +225,24 @@ if( is_admin() ) {
 		$term_meta = get_metadata( $term_taxonomy, $term->term_id );
 
 		include_once( WOO_ST_PATH . 'templates/admin/category_data.php' );
+
+	}
+
+	function woo_st_tag_data_meta_box( $term = '', $taxonomy = '' ) {
+
+		$term_taxonomy = 'woocommerce_term';
+		$term_meta = get_metadata( $term_taxonomy, $term->term_id );
+
+		include_once( WOO_ST_PATH . 'templates/admin/tag_data.php' );
+
+	}
+
+	function woo_st_brand_data_meta_box( $term = '', $taxonomy = '' ) {
+
+		$term_taxonomy = 'woocommerce_term';
+		$term_meta = get_metadata( $term_taxonomy, $term->term_id );
+
+		include_once( WOO_ST_PATH . 'templates/admin/brand_data.php' );
 
 	}
 

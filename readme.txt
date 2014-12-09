@@ -4,8 +4,8 @@ Contributors: visser
 Donate link: http://www.visser.com.au/#donations
 Tags: woocommerce, mod, delete store, clean store, nuke, store toolkit
 Requires at least: 2.9.2
-Tested up to: 4.0
-Stable tag: 1.4.6
+Tested up to: 4.0.1
+Stable tag: 1.4.7
 
 == Description ==
 
@@ -18,10 +18,15 @@ Store Toolkit includes a growing set of commonly-used WooCommerce administration
 * Products
 * Variations
 * Product Categories
-* Produt Tags
+* Product Tags
+* Product Brands
+* Product Vendors
 * Product Images
 * Product Attributes
 * Orders
+* Order Items
+* Tax Rates
+* Download Permissions
 * Coupons
 * Empty Products by Product Category
 * Delete Orders by Order Status
@@ -79,6 +84,9 @@ If you have any problems, questions or suggestions please join the members discu
 http://www.visser.com.au/woocommerce/forums/
 
 == Changelog ==
+
+= 1.4.7 =
+* Added: Product Brands support
 
 = 1.4.6 =
 * Added: User capability check 'manage_options' for Meta boxes

@@ -4,8 +4,10 @@
 * Filename: common.php
 * Description: common.php loads commonly accessed functions across the Visser Labs suite.
 * 
+* Free
 * - woo_get_action
 * - woo_get_woo_version
+*
 */
 
 if( is_admin() ) {
@@ -23,13 +25,13 @@ if( !function_exists( 'woo_get_action' ) ) {
 	function woo_get_action( $prefer_get = false ) {
 
 		if ( isset( $_GET['action'] ) && $prefer_get )
-			return $_GET['action'];
+			return sanitize_text_field( $_GET['action'] );
 
 		if ( isset( $_POST['action'] ) )
-			return $_POST['action'];
+			return sanitize_text_field( $_POST['action'] );
 
 		if ( isset( $_GET['action'] ) )
-			return $_GET['action'];
+			return sanitize_text_field( $_GET['action'] );
 
 		return false;
 

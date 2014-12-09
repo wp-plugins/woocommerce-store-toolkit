@@ -3,7 +3,7 @@
 
 Filename: common-dashboard_widgets.php
 Description: common-dashboard_widgets.php loads commonly access Dashboard widgets across the Visser Labs suite.
-Version: 1.1
+Version: 1.4
 
 */
 
@@ -13,7 +13,9 @@ if( !function_exists( 'woo_vl_dashboard_setup' ) ) {
 
 	function woo_vl_dashboard_setup() {
 
-		wp_add_dashboard_widget( 'woo_vl_news_widget', __( 'Plugin News - by Visser Labs', 'woo_vl' ), 'woo_vl_news_widget' );
+		if( current_user_can( 'manage_options' ) ) {
+			wp_add_dashboard_widget( 'woo_vl_news_widget', __( 'Plugin News - by Visser Labs', 'woo_st' ), 'woo_vl_news_widget' );
+		}
 
 	}
 	add_action( 'wp_dashboard_setup', 'woo_vl_dashboard_setup' );
@@ -37,7 +39,7 @@ if( !function_exists( 'woo_vl_dashboard_setup' ) ) {
 			endforeach;
 			$output .= '</ul>';
 		} else {
-			$message = __( 'Connection failed. Please check your network settings.', 'woo_vl' );
+			$message = __( 'Connection failed. Please check your network settings.', 'woo_st' );
 			$output .= '<p>' . $message . '</p>';
 		}
 		$output .= '</div>';

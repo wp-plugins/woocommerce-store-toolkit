@@ -74,6 +74,24 @@
 
 						<tr>
 							<th>
+								<label for="tax_rates"><?php _e( 'Tax Rates', 'woo_st' ); ?></label>
+							</th>
+							<td>
+								<input type="checkbox" id="tax_rates" name="woo_st_tax_rates"<?php echo disabled( $tax_rates, 0 ); ?> /> (<?php echo $tax_rates; ?>)
+							</td>
+						</tr>
+
+						<tr>
+							<th>
+								<label for="download_permissions"><abbr title="<?php _e( 'Product Download Permissions', 'woo_st' ); ?>"><?php _e( 'Download Permissions', 'woo_st' ); ?></label>
+							</th>
+							<td>
+								<input type="checkbox" id="download_permissions" name="woo_st_download_permissions"<?php echo disabled( $download_permissions, 0 ); ?> /> (<?php echo $download_permissions; ?>)
+							</td>
+						</tr>
+
+						<tr>
+							<th>
 								<label for="coupons"><?php _e( 'Coupons', 'woo_st' ); ?></label>
 							</th>
 							<td>
@@ -89,6 +107,30 @@
 							<td>
 								<input type="checkbox" id="creditcards" name="woo_st_creditcards"<?php echo disabled( $credit_cards, 0 ); ?> /> (<?php echo $credit_cards; ?>)
 								<span class="description"><?php echo sprintf( __( 'via %s', 'woo_st' ), '<a href="http://www.visser.com.au/woocommerce/plugins/offline-credit-card-processing/" target="_blank">' . __( 'Offline Credit Card Processing', 'woo_st' ) . '</a>' ); ?></span>
+							</td>
+						</tr>
+
+<?php } ?>
+<?php if( isset( $brands ) ) { ?>
+						<tr>
+							<th>
+								<label for="product_brands"><?php _e( 'Product Brands', 'woo_st' ); ?></label>
+							</th>
+							<td>
+								<input type="checkbox" id="product_brands" name="woo_st_product_brands"<?php echo disabled( $brands, 0 ); ?> /> (<?php echo $brands; ?>)
+								<span class="description"><?php echo sprintf( __( 'via %s', 'woo_st' ), '<a href="http://www.woothemes.com/products/brands/" target="_blank">' . __( 'WooCommerce Brands', 'woo_st' ) . '</a>' ); ?></span>
+							</td>
+						</tr>
+
+<?php } ?>
+<?php if( isset( $vendors ) ) { ?>
+						<tr>
+							<th>
+								<label for="product_vendors"><?php _e( 'Product Vendors', 'woo_st' ); ?></label>
+							</th>
+							<td>
+								<input type="checkbox" id="product_vendors" name="woo_st_product_vendors"<?php echo disabled( $vendors, 0 ); ?> /> (<?php echo $vendors; ?>)
+								<span class="description"><?php echo sprintf( __( 'via %s', 'woo_st' ), '<a href="http://www.woothemes.com/products/product-vendors/" target="_blank">' . __( 'Product Vendors', 'woo_st' ) . '</a>' ); ?></span>
 							</td>
 						</tr>
 

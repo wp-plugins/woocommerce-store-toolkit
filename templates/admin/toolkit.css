@@ -12,6 +12,8 @@
 /* Edit Category */
 
 body.taxonomy-product_cat table.category_data th,
+body.taxonomy-product_tag table.tag_data th,
+body.taxonomy-product_brand table.brand_data th,
 body.user-edit-php table.user_data th,
 body.profile-php table.user_data th {
 	padding:8px 10px;

@@ -146,10 +146,14 @@ function woo_st_tab_template( $tab = '' ) {
 					$orders_data = get_terms( $term_taxonomy, $args );
 				}
 			}
+			$tax_rates = woo_st_return_count( 'tax_rates' );
+			$download_permissions = woo_st_return_count( 'download_permissions' );
 			$coupons = woo_st_return_count( 'coupons' );
-
-			$credit_cards = woo_st_return_count( 'credit-cards' );
 			$attributes = woo_st_return_count( 'attributes' );
+
+			$brands = woo_st_return_count( 'brands' );
+			$vendors = woo_st_return_count( 'vendors' );
+			$credit_cards = woo_st_return_count( 'credit-cards' );
 
 			$posts = woo_st_return_count( 'posts' );
 			$post_categories = woo_st_return_count( 'post_categories' );
