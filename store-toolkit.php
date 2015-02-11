@@ -3,7 +3,7 @@
 Plugin Name: WooCommerce - Store Toolkit
 Plugin URI: http://www.visser.com.au/woocommerce/plugins/store-toolkit/
 Description: Store Toolkit includes a growing set of commonly-used WooCommerce administration tools aimed at web developers and store maintainers.
-Version: 1.4.7
+Version: 1.4.8
 Author: Visser Labs
 Author URI: http://www.visser.com.au/about/
 License: GPL2
@@ -46,55 +46,91 @@ if( is_admin() ) {
 				if( !ini_get( 'safe_mode' ) )
 					set_time_limit( 0 );
 
+				// List of supported datasets
+				$datasets = array(
+					'product',
+					'product_category',
+					'product_tag',
+					'product_brand',
+					'product_vendor',
+					'product_image',
+					'coupon',
+					'attribute',
+					'order',
+					'tax_rate',
+					'download_permission',
+					'credit_card',
+					'post',
+					'post_category',
+					'post_tag',
+					'link',
+					'comment',
+					'media_image'
+				);
+				// Check if the re-commence nuke notice has been enabled
+				if( isset( $_GET['dataset'] ) ) {
+					$dataset = strtolower( sanitize_text_field( $_GET['dataset'] ) );
+					if( in_array( $dataset, $datasets ) )
+						woo_st_clear_dataset( $dataset );
+					return;
+				}
+
 				// WooCommerce
 				if( isset( $_POST['woo_st_products'] ) )
-					woo_st_clear_dataset( 'products' );
+					woo_st_clear_dataset( 'product' );
 				if( isset( $_POST['woo_st_categories'] ) ) {
 					$categories = $_POST['woo_st_categories'];
-					woo_st_clear_dataset( 'categories', $categories );
+					woo_st_clear_dataset( 'product_category', $categories );
 				} else if( isset( $_POST['woo_st_product_categories'] ) ) {
-					woo_st_clear_dataset( 'categories' );
+					woo_st_clear_dataset( 'product_category' );
 				}
 				if( isset( $_POST['woo_st_product_tags'] ) )
-					woo_st_clear_dataset( 'tags' );
+					woo_st_clear_dataset( 'product_tag' );
 				if( isset( $_POST['woo_st_product_brands'] ) )
-					woo_st_clear_dataset( 'brands' );
+					woo_st_clear_dataset( 'product_brand' );
 				if( isset( $_POST['woo_st_product_vendors'] ) )
-					woo_st_clear_dataset( 'vendors' );
+					woo_st_clear_dataset( 'product_vendor' );
 				if( isset( $_POST['woo_st_product_images'] ) )
-					woo_st_clear_dataset( 'product_images' );
+					woo_st_clear_dataset( 'product_image' );
 				if( isset( $_POST['woo_st_coupons'] ) )
-					woo_st_clear_dataset( 'coupons' );
+					woo_st_clear_dataset( 'coupon' );
 				if( isset( $_POST['woo_st_attributes'] ) )
-					woo_st_clear_dataset( 'attributes' );
+					woo_st_clear_dataset( 'attribute' );
 				if( isset( $_POST['woo_st_orders'] ) ) {
 					$orders = $_POST['woo_st_orders'];
-					woo_st_clear_dataset( 'orders', $orders );
+					woo_st_clear_dataset( 'order', $orders );
 				} else if( isset( $_POST['woo_st_sales_orders'] ) ) {
-					woo_st_clear_dataset( 'orders' );
+					woo_st_clear_dataset( 'order' );
 				}
 				if( isset( $_POST['woo_st_tax_rates'] ) )
-					woo_st_clear_dataset( 'tax_rates' );
+					woo_st_clear_dataset( 'tax_rate' );
 				if( isset( $_POST['woo_st_download_permissions'] ) )
-					woo_st_clear_dataset( 'download_permissions' );
+					woo_st_clear_dataset( 'download_permission' );
 
 				// 3rd Party
 				if( isset( $_POST['woo_st_creditcards'] ) )
-					woo_st_clear_dataset( 'credit-cards' );
+					woo_st_clear_dataset( 'credit_card' );
 
 				// WordPress
 				if( isset( $_POST['woo_st_posts'] ) )
-					woo_st_clear_dataset( 'posts' );
+					woo_st_clear_dataset( 'post' );
 				if( isset( $_POST['woo_st_post_categories'] ) )
-					woo_st_clear_dataset( 'post_categories' );
+					woo_st_clear_dataset( 'post_category' );
 				if( isset( $_POST['woo_st_post_tags'] ) )
-					woo_st_clear_dataset( 'post_tags' );
+					woo_st_clear_dataset( 'post_tag' );
 				if( isset( $_POST['woo_st_links'] ) )
-					woo_st_clear_dataset( 'links' );
+					woo_st_clear_dataset( 'link' );
 				if( isset( $_POST['woo_st_comments'] ) )
-					woo_st_clear_dataset( 'comments' );
+					woo_st_clear_dataset( 'comment' );
 				if( isset( $_POST['woo_st_media_images'] ) )
-					woo_st_clear_dataset( 'media_images' );
+					woo_st_clear_dataset( 'media_image' );
+				break;
+
+			case 'relink-rogue-simple-type':
+				woo_st_relink_rogue_simple_type();
+				$url = add_query_arg( 'action', null );
+				wp_redirect( $url );
+				exit();
 				break;
 
 			default:
@@ -141,9 +177,8 @@ if( is_admin() ) {
 		switch( $action ) {
 
 			case 'nuke':
-				$message = __( 'Chosen WooCommerce and/or WordPress details have been permanently erased from your store.', 'woo_st' );
-				$output = '<div class="updated settings-error"><p>' . $message . '</p></div>';
-				echo $output;
+				$message = __( 'The selected WooCommerce and/or WordPress details from the previous screen have been permanently erased from your store. <strong>Ta da!</strong>', 'woo_st' );
+				woo_st_admin_notice_html( $message );
 
 				woo_st_default_html_page();
 				break;

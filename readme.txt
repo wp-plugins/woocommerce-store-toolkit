@@ -4,8 +4,8 @@ Contributors: visser
 Donate link: http://www.visser.com.au/#donations
 Tags: woocommerce, mod, delete store, clean store, nuke, store toolkit
 Requires at least: 2.9.2
-Tested up to: 4.0.1
-Stable tag: 1.4.7
+Tested up to: 4.1
+Stable tag: 1.4.8
 
 == Description ==
 
@@ -42,6 +42,7 @@ Store Toolkit includes a growing set of commonly-used WooCommerce administration
 
 3. WooCommerce maintainence/debugging tools
 
+* Re-link rogue Products to the Simple Product Type
 * All in One SEO Pack integration
 * Order Post Meta meta box on Orders screen
 * Product Post Meta meta box on Products screen
@@ -84,6 +85,13 @@ If you have any problems, questions or suggestions please join the members discu
 http://www.visser.com.au/woocommerce/forums/
 
 == Changelog ==
+
+= 1.4.8 =
+* Added: Tools tab for non-nuke actions
+* Added: Re-link rogue Products to Simple Product Type
+* Fixed: Common white screen and 500 Internal Server Error notices
+* Added: Explanation of nuke process while nuking
+* Added: Retry notice after nuke fails mid-nuke
 
 = 1.4.7 =
 * Added: Product Brands support

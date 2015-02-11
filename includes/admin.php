@@ -122,10 +122,19 @@ function woo_st_tab_template( $tab = '' ) {
 	switch( $tab ) {
 
 		case 'nuke':
-			$products = woo_st_return_count( 'products' );
-			$images = woo_st_return_count( 'product_images' );
-			$tags = woo_st_return_count( 'tags' );
-			$categories = woo_st_return_count( 'categories' );
+
+			// Check if a previous nuke failed mid-drop
+			$in_progress = woo_st_get_option( 'in_progress', '' );
+			if( !empty( $in_progress ) ) {
+				$message = sprintf( __( 'It looks like a previous nuke failed to clear that dataset, this is common in large catalogues and is likely due to WordPress hitting a memory limit or server timeout. Don\'t stress, <a href="%s">retry %s nuke?</a>', 'woo_st' ), add_query_arg( array( 'action' => 'nuke', 'dataset' => $in_progress ) ), ucfirst( $in_progress ) );
+				woo_st_admin_notice_html( $message, 'error' );
+				woo_st_update_option( 'in_progress', '' );
+			}
+
+			$products = woo_st_return_count( 'product' );
+			$images = woo_st_return_count( 'product_image' );
+			$tags = woo_st_return_count( 'product_tag' );
+			$categories = woo_st_return_count( 'product_category' );
 			if( $categories ) {
 				$term_taxonomy = 'product_cat';
 				$args = array(
@@ -133,7 +142,7 @@ function woo_st_tab_template( $tab = '' ) {
 				);
 				$categories_data = get_terms( $term_taxonomy, $args );
 			}
-			$orders = woo_st_return_count( 'orders' );
+			$orders = woo_st_return_count( 'order' );
 			if( $orders ) {
 				// Check if this is a WooCommerce 2.2+ instance
 				$woocommerce_version = woo_get_woo_version();
@@ -146,21 +155,21 @@ function woo_st_tab_template( $tab = '' ) {
 					$orders_data = get_terms( $term_taxonomy, $args );
 				}
 			}
-			$tax_rates = woo_st_return_count( 'tax_rates' );
-			$download_permissions = woo_st_return_count( 'download_permissions' );
-			$coupons = woo_st_return_count( 'coupons' );
-			$attributes = woo_st_return_count( 'attributes' );
+			$tax_rates = woo_st_return_count( 'tax_rate' );
+			$download_permissions = woo_st_return_count( 'download_permission' );
+			$coupons = woo_st_return_count( 'coupon' );
+			$attributes = woo_st_return_count( 'attribute' );
 
-			$brands = woo_st_return_count( 'brands' );
-			$vendors = woo_st_return_count( 'vendors' );
-			$credit_cards = woo_st_return_count( 'credit-cards' );
+			$brands = woo_st_return_count( 'product_brand' );
+			$vendors = woo_st_return_count( 'product_vendor' );
+			$credit_cards = woo_st_return_count( 'credit_card' );
 
-			$posts = woo_st_return_count( 'posts' );
-			$post_categories = woo_st_return_count( 'post_categories' );
-			$post_tags = woo_st_return_count( 'post_tags' );
-			$links = woo_st_return_count( 'links' );
-			$comments = woo_st_return_count( 'comments' );
-			$media_images = woo_st_return_count( 'media_images' );
+			$posts = woo_st_return_count( 'post' );
+			$post_categories = woo_st_return_count( 'post_category' );
+			$post_tags = woo_st_return_count( 'post_tag' );
+			$links = woo_st_return_count( 'link' );
+			$comments = woo_st_return_count( 'comment' );
+			$media_images = woo_st_return_count( 'media_image' );
 
 			$show_table = false;
 			if( $products || $images || $tags || $categories || $orders || $credit_cards || $attributes )
