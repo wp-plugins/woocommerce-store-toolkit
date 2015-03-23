@@ -77,27 +77,32 @@ if( is_admin() ) {
 
 			case 'product_category':
 				$term_taxonomy = 'product_cat';
-				$count = wp_count_terms( $term_taxonomy );
+				if( taxonomy_exists( $term_taxonomy ) )
+					$count = wp_count_terms( $term_taxonomy );
 				break;
 
 			case 'product_tag':
 				$term_taxonomy = 'product_tag';
-				$count = wp_count_terms( $term_taxonomy );
+				if( taxonomy_exists( $term_taxonomy ) )
+					$count = wp_count_terms( $term_taxonomy );
 				break;
 
 			case 'product_brand':
 				$term_taxonomy = 'product_brand';
-				$count = wp_count_terms( $term_taxonomy );
+				if( taxonomy_exists( $term_taxonomy ) )
+					$count = wp_count_terms( $term_taxonomy );
 				break;
 
 			case 'product_vendor':
 				$term_taxonomy = 'shop_vendor';
-				$count = wp_count_terms( $term_taxonomy );
+				if( taxonomy_exists( $term_taxonomy ) )
+					$count = wp_count_terms( $term_taxonomy );
 				break;
 
 			case 'order':
 				$post_type = 'shop_order';
-				$count = wp_count_posts( $post_type );
+				if( post_type_exists( $post_type ) )
+					$count = wp_count_posts( $post_type );
 				break;
 
 			case 'tax_rate':
@@ -110,7 +115,8 @@ if( is_admin() ) {
 
 			case 'coupon':
 				$post_type = 'shop_coupon';
-				$count = wp_count_posts( $post_type );
+				if( post_type_exists( $post_type ) )
+					$count = wp_count_posts( $post_type );
 				break;
 
 			case 'attribute':
@@ -121,24 +127,28 @@ if( is_admin() ) {
 
 			case 'credit_card':
 				$post_type = 'offline_payment';
-				$count = wp_count_posts( $post_type );
+				if( post_type_exists( $post_type ) )
+					$count = wp_count_posts( $post_type );
 				break;
 
 			// WordPress
 
 			case 'post':
 				$post_type = 'post';
-				$count = wp_count_posts( $post_type );
+				if( post_type_exists( $post_type ) )
+					$count = wp_count_posts( $post_type );
 				break;
 
 			case 'post_category':
 				$term_taxonomy = 'category';
-				$count = wp_count_terms( $term_taxonomy );
+				if( taxonomy_exists( $term_taxonomy ) )
+					$count = wp_count_terms( $term_taxonomy );
 				break;
 
 			case 'post_tag':
 				$term_taxonomy = 'post_tag';
-				$count = wp_count_terms( $term_taxonomy );
+				if( taxonomy_exists( $term_taxonomy ) )
+					$count = wp_count_terms( $term_taxonomy );
 				break;
 
 			case 'link':
@@ -163,8 +173,10 @@ if( is_admin() ) {
 						$count = $item + $count;
 				}
 				return $count;
-			} else {
+			} else if( !empty( $count_sql ) ) {
 				$count = $wpdb->get_var( $count_sql );
+			} else {
+				$count = 0;
 			}
 			return $count;
 		} else {
@@ -400,8 +412,10 @@ if( is_admin() ) {
 						}
 						$orders = get_posts( $args );
 						if( !empty( $orders ) ) {
-							foreach( $orders as $order )
+							foreach( $orders as $order ) {
 								wp_delete_post( $order, true );
+								$wpdb->query( $wpdb->prepare( "DELETE FROM `" . $wpdb->term_relationships . "` WHERE `order_id` = %d", $order ) );
+							}
 							unset( $orders, $order );
 						}
 					}
@@ -417,8 +431,10 @@ if( is_admin() ) {
 					while( woo_st_return_count( 'order' ) ) {
 						$orders = get_posts( $args );
 						if( !empty( $orders ) ) {
-							foreach( $orders as $order )
+							foreach( $orders as $order ) {
 								wp_delete_post( $order, true );
+								$wpdb->query( $wpdb->prepare( "DELETE FROM `" . $wpdb->term_relationships . "` WHERE `order_id` = %d", $order ) );
+							}
 							unset( $orders, $order );
 						}
 					}

@@ -5,7 +5,7 @@ Donate link: http://www.visser.com.au/#donations
 Tags: woocommerce, mod, delete store, clean store, nuke, store toolkit
 Requires at least: 2.9.2
 Tested up to: 4.1
-Stable tag: 1.4.8
+Stable tag: 1.5
 
 == Description ==
 
@@ -85,6 +85,13 @@ If you have any problems, questions or suggestions please join the members discu
 http://www.visser.com.au/woocommerce/forums/
 
 == Changelog ==
+
+= 1.5 =
+* Added: Delete Download Permissions on Orders nuked
+
+= 1.4.9 =
+* Fixed: Taxonomy detection prior to counts
+* Added: Custom Post meta box to Product Variation Edit screen
 
 = 1.4.8 =
 * Added: Tools tab for non-nuke actions

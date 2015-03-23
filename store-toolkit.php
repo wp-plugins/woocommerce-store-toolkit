@@ -3,7 +3,7 @@
 Plugin Name: WooCommerce - Store Toolkit
 Plugin URI: http://www.visser.com.au/woocommerce/plugins/store-toolkit/
 Description: Store Toolkit includes a growing set of commonly-used WooCommerce administration tools aimed at web developers and store maintainers.
-Version: 1.4.8
+Version: 1.5
 Author: Visser Labs
 Author URI: http://www.visser.com.au/about/
 License: GPL2
@@ -195,13 +195,18 @@ if( is_admin() ) {
 	function add_data_meta_boxes( $post_type, $post = '' ) {
 
 		if( $post->post_status <> 'auto-draft' ) {
+			// Product
 			$post_type = 'product';
 			add_meta_box( 'woo-product-post_data', __( 'Product Post Meta', 'woo_st' ), 'woo_st_product_data_meta_box', $post_type, 'normal', 'default' );
+			$post_type = 'product_variation';
+			add_meta_box( 'woo-product-post_data', __( 'Product Post Meta', 'woo_st' ), 'woo_st_product_data_meta_box', $post_type, 'normal', 'default' );
 
+			// Order
 			$post_type = 'shop_order';
 			add_meta_box( 'woo-order-post_data', __( 'Order Post Meta', 'woo_st' ), 'woo_st_order_data_meta_box', $post_type, 'normal', 'default' );
 			add_meta_box( 'woo-order-post_item', __( 'Order Items Post Meta', 'woo_st' ), 'woo_st_order_items_data_meta_box', $post_type, 'normal', 'default' );
 
+			// Coupon
 			$post_type = 'shop_coupon';
 			add_meta_box( 'woo-coupon-post_data', __( 'Coupon Post Meta', 'woo_st' ), 'woo_st_coupon_data_meta_box', $post_type, 'normal', 'default' );
 		}
