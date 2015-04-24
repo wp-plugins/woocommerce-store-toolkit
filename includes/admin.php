@@ -65,7 +65,7 @@ function woo_st_add_settings_link( $links, $file ) {
 	if( $file == $this_plugin ) {
 		$docs_url = 'http://www.visser.com.au/docs/';
 		$docs_link = sprintf( '<a href="%s" target="_blank">' . __( 'Docs', 'woo_st' ) . '</a>', $docs_url );
-		$settings_link = sprintf( '<a href="%s">' . __( 'Settings', 'woo_st' ) . '</a>', add_query_arg( 'page', 'woo_st', 'admin.php' ) );
+		$settings_link = sprintf( '<a href="%s">' . __( 'Settings', 'woo_st' ) . '</a>', esc_url( add_query_arg( 'page', 'woo_st', 'admin.php' ) ) );
 		array_unshift( $links, $docs_link );
 		array_unshift( $links, $settings_link );
 	}
@@ -126,7 +126,7 @@ function woo_st_tab_template( $tab = '' ) {
 			// Check if a previous nuke failed mid-drop
 			$in_progress = woo_st_get_option( 'in_progress', '' );
 			if( !empty( $in_progress ) ) {
-				$message = sprintf( __( 'It looks like a previous nuke failed to clear that dataset, this is common in large catalogues and is likely due to WordPress hitting a memory limit or server timeout. Don\'t stress, <a href="%s">retry %s nuke?</a>', 'woo_st' ), add_query_arg( array( 'action' => 'nuke', 'dataset' => $in_progress ) ), ucfirst( $in_progress ) );
+				$message = sprintf( __( 'It looks like a previous nuke failed to clear that dataset, this is common in large catalogues and is likely due to WordPress hitting a memory limit or server timeout. Don\'t stress, <a href="%s">retry %s nuke?</a>', 'woo_st' ), esc_url( add_query_arg( array( 'action' => 'nuke', 'dataset' => $in_progress ) ) ), ucfirst( $in_progress ) );
 				woo_st_admin_notice_html( $message, 'error' );
 				woo_st_update_option( 'in_progress', '' );
 			}

@@ -43,7 +43,7 @@ if( is_admin() ) {
 			$rate_url = 'http://wordpress.org/support/view/plugin-reviews/' . WOO_ST_DIRNAME;
 			$output = '
 	<div id="support-donate_rate" class="support-donate_rate">
-		<p>' . sprintf( __( '<strong>Like this Plugin?</strong> %s and %s.', 'woo_st' ), '<a href="' . $donate_url . '" target="_blank">' . __( 'Donate to support this Plugin', 'woo_st' ) . '</a>', '<a href="' . add_query_arg( array( 'rate' => '5' ), $rate_url ) . '#postform" target="_blank">rate / review us on WordPress.org</a>' ) . '</p>
+		<p>' . sprintf( __( '<strong>Like this Plugin?</strong> %s and %s.', 'woo_st' ), '<a href="' . $donate_url . '" target="_blank">' . __( 'Donate to support this Plugin', 'woo_st' ) . '</a>', '<a href="' . esc_url( add_query_arg( array( 'rate' => '5' ), $rate_url ) ) . '#postform" target="_blank">rate / review us on WordPress.org</a>' ) . '</p>
 	</div>
 ';
 		}
